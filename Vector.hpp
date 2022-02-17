@@ -157,11 +157,12 @@ namespace ft {
 	bool operator>  (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs); // TODO
 	template <class T, class Alloc>
 	bool operator>= (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs); // TODO
-	
+
 	/*
 	** Swap
 	*/
 	template <class T, class Alloc>
   	void swap (vector<T,Alloc>& x, vector<T,Alloc>& y); // TODO
 }
+
 #endif
