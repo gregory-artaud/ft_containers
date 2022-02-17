@@ -4,6 +4,8 @@
 #include "vector.hpp"
 
 /*
+** 
+** Documentation: https://www.cplusplus.com/reference/stack/stack/
 **
 ** TODO:
 **

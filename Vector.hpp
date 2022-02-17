@@ -7,12 +7,15 @@
 #define TWO_POWER_64 TWO_POWER_N(64)
 
 /*
+** 
+** Documentation: https://www.cplusplus.com/reference/vector/vector/
 **
 ** TODO:
 **
 ** - Recheck iterators (maybe implement random access iterator)
 ** - Recheck constructors (maybe implement copy constructor)
 ** - Recheck if operators are neeeded (maybe add them)
+** - Implement everything
 **
 */
 
@@ -37,10 +40,12 @@ namespace ft {
 			T* _data;
 			size_type _size;
 			size_type _capacity;
-			Alloc _alloc;
+			allocator_type _alloc;
 
 		public:
-			// constructors and destructor (recheck on https://www.cplusplus.com/reference/vector/vector/ needed)
+			/*
+			** Constructors and Destructor
+			*/
 			vector (); // TODO
 			~vector (); // TODO
 
@@ -140,7 +145,8 @@ namespace ft {
 			/*
 			** Allocator
 			*/
-			allocator_type get_allocator() const { return _alloc; }
+			// NB: return a copy of the allocator
+			allocator_type get_allocator() const { return allocator_type(_alloc); }
 	};
 	/*
 	** Relational operators
