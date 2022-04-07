@@ -69,12 +69,13 @@ int main(void) {
 
 			TEST("fill constructor #1", equal(my_v, std_v))
 		}
-		// #2
+		// #2 Error here : the range constructor is called and idk why
 		{
 			ft::vector<int> my_v(10, 0);
 			std::vector<int> std_v(10, 0);
 
 			TEST("fill constructor #2", equal(my_v, std_v))
+
 		}
 		// Test size and value constructor
 	}

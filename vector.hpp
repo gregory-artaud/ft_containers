@@ -95,7 +95,13 @@ namespace ft {
 
 			vector& operator= (const vector& x)
 			{
-				
+				for (size_type i = 0; i < _size; i++)
+						_alloc.destroy(_data + i);
+					_alloc.deallocate(_data, _capacity);
+				reserve(x._capacity);
+				for (size_type i = 0; i < x._size; i++)
+					_alloc.construct(_data + i, x._data[i]);
+				_size = x._size;
 				return *this;
 			}
 
