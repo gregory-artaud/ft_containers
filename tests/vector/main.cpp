@@ -2,6 +2,22 @@
 #include "vector.hpp"
 #include <vector>
 
+#define COMPARE(x, y)										 \
+	printVectorData(x);										\
+	printVectorData(y);
+
+#define TEST(name, x)										 \
+	std::cout << "\tTest " << name << ": ";					\
+	if (!x)													\
+	{														\
+		result++; 											\
+		std::cout << "KO " << result << std::endl;			\
+		COMPARE(my_v, std_v)								\
+	}														\
+	else													\
+		std::cout << "OK" << std::endl;
+
+
 bool equal(const ft::vector<int>& lhs, const std::vector<int>& rhs) {
 	if (lhs.size() != rhs.size()) return false;
 	if (lhs.max_size() != rhs.max_size()) return false;
@@ -12,31 +28,57 @@ bool equal(const ft::vector<int>& lhs, const std::vector<int>& rhs) {
 }
 
 void printVectorData(const ft::vector<int>& v) {
-	std::cout << "size: " << v.size() << std::endl;
-	std::cout << "max_size: " << v.max_size() << std::endl;
-	std::cout << "capacity: " << v.capacity() << std::endl;
+	std::cout << std::endl;
+	std::cout << "\t\tsize: " << v.size() << std::endl;
+	std::cout << "\t\tmax_size: " << v.max_size() << std::endl;
+	std::cout << "\t\tcapacity: " << v.capacity() << std::endl;
 }
 
 void printVectorData(const std::vector<int>& v) {
-	std::cout << "size: " << v.size() << std::endl;
-	std::cout << "max_size: " << v.max_size() << std::endl;
-	std::cout << "capacity: " << v.capacity() << std::endl;
+	std::cout << std::endl;
+	std::cout << "\t\tsize: " << v.size() << std::endl;
+	std::cout << "\t\tmax_size: " << v.max_size() << std::endl;
+	std::cout << "\t\tcapacity: " << v.capacity() << std::endl;
 }
+
+
 
 int main(void) {
 	// Nombre de tests echoués
 	// Il faut le maintenir a 0
 	int result = 0;
 
-#define TEST(x) if (!x) result++;
 
 	// Test constructors
-	ft::vector<int> mv1;
-	std::vector<int> sv1;
+	{
+		std::cout << "Test constructors" << std::endl;
 
-	std::cout << "Test constructors" << std::endl;
-	TEST(equal(mv1, sv1))
-	
+		// Test default constructor
+		{
+			ft::vector<int> my_v;
+			std::vector<int> std_v;
+
+			TEST("default constructor #1", equal(my_v, std_v))
+		}
+
+		// Test fill constructor
+		// #1
+		{
+			ft::vector<int> my_v(0);
+			std::vector<int> std_v(0);
+
+			TEST("fill constructor #1", equal(my_v, std_v))
+		}
+		// #2
+		{
+			ft::vector<int> my_v(10, 0);
+			std::vector<int> std_v(10, 0);
+
+			TEST("fill constructor #2", equal(my_v, std_v))
+		}
+		// Test size and value constructor
+	}
+
 	std::cout << "Result: " << result << std::endl;
 	return 0;
 }

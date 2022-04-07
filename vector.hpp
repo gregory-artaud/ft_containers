@@ -46,6 +46,7 @@ namespace ft {
 			/*
 			** Constructors and Destructor
 			*/
+			// Default constructor
 			vector (const allocator_type& alloc = allocator_type())
 			{
 				_data = nullptr;
@@ -54,17 +55,49 @@ namespace ft {
 				_alloc = alloc;
 			}
 
-			vector (size_type n, const value_type& val = value_type(), const allocator_type& alloc = allocator_type()); // TODO
+			// Fill constructor
+			vector (size_type n, const value_type& val = value_type(), const allocator_type& alloc = allocator_type())
+			{
+				_data = nullptr;
+				_size = 0;
+				_capacity = 0;
+				_alloc = alloc;
+				(void)n;
+				(void)val;
+				//for (size_type i = 0; i < n; i++) _alloc.construct(_data + i, val);
+			}
+
+			// Range constructor
 			template <class InputIterator>
-			vector (InputIterator first, InputIterator last, const allocator_type& alloc = allocator_type()); // TODO
-			vector (const vector& x); // TODO
+			vector (InputIterator first, InputIterator last, const allocator_type& alloc = allocator_type()) // TODO
+			{
+				(void)first;
+				(void)last;
+				(void)alloc;
+			} 
+
+			// Copy constructor
+			vector (const vector& x) // TODO
+			{
+				(void)x;
+			}
+
+			// Default destructor
 			~vector ()
 			{
 				if (_data)
+				{
+					for (size_type i = 0; i < _size; i++)
+						_alloc.destroy(_data + i);
 					_alloc.deallocate(_data, _capacity);
+				}
 			}
 
-			vector& operator= (const vector& x); // TODO
+			vector& operator= (const vector& x)
+			{
+				
+				return *this;
+			}
 
 			/*
 			** Iterators 
@@ -86,7 +119,18 @@ namespace ft {
 			bool empty () const { return _size == 0; }
 			size_type max_size () const { return (4611686018427387903); } // replace by formula : TWO_POWER_64 / sizeof(value_type) - 1
 			void resize (size_type n, value_type val = value_type()); // TODO
-			void reserve (size_type n); // TODO
+			void reserve (size_type n)
+			{
+				if (n < _capacity) return;
+				pointer tmp = _alloc.allocate(n);
+				for (size_type i = 0; i < _size; i++)
+					_alloc.construct(tmp + i, _data[i]);
+				for (size_type i = 0; i < _size; i++)
+					_alloc.destroy(_data + i);
+				_alloc.deallocate(_data, _capacity);
+				_capacity = n;
+				_data = tmp;
+			}
 
 			/*
 			** Element access
@@ -159,7 +203,13 @@ namespace ft {
 			iterator erase (iterator position); // TODO
 			iterator erase (iterator first, iterator last); // TODO
 
-			void push_back (const value_type& val); // TODO
+			void push_back (const value_type& val)
+			{
+				if (_size == _capacity)
+					reserve(_capacity * 2);
+				_alloc.construct(_data + _size, val);
+				_size++;
+			}
 			void pop_back (); // TODO
 			void swap (vector& x); // TODO
 			void clear(); // TODO
