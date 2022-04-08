@@ -1,12 +1,14 @@
 #
 # MAIN VARIABLES
 #
-PROGRAMS	= vector stack map
-DEPS		= $(shell find . -type f -name "*.hpp")
+PROGRAMS	= stl ft
 DEPS_DIR	= iterators .
 TESTS_DIR	= tests
 TEST_EXE	= ./tests/run_tests.sh
-$(foreach prog, $(PROGRAMS), $(eval $(prog)_OBJ = $(TESTS_DIR)/$(prog)/main.o))
+stl_OBJ		= tests/stl.o
+ft_OBJ		= tests/my_stl.o
+OBJECTS		=  $(stl_OBJ) $(ft_OBJ)
+MAIN		= tests/main.cpp
 CC			= c++
 CFLAGS		= -Wall -Werror -Wextra -std=c++98 $(addprefix -I, $(DEPS_DIR))
 SHELL		= /bin/bash
@@ -44,6 +46,11 @@ $(1): $$($(1)_OBJ)
 ALL_OBJS += $$($(1)_OBJ)
 endef
 
+define OBJ_template =
+$(1): $(2)
+	@$(call BUILD,$(1)) ; \
+	$(call TRY,$(CC) $(CFLAGS) -D $(shell echo $(1) | cut -d '.' -f1 | cut -d '/' -f2)=1 -c $(2) -o $(1))
+endef
 
 #
 # RECIPES
@@ -52,10 +59,7 @@ endef
 all: $(PROGRAMS)
 
 $(foreach prog, $(PROGRAMS), $(eval $(call PROGRAM_template,$(prog))))
-
-%.o: %.cpp
-	@$(call BUILD,$<); \
-	$(call TRY,$(CC) $(CFLAGS) -c $< -o $@)
+$(foreach obj, $(OBJECTS), $(eval $(call OBJ_template,$(obj),$(MAIN))))
 
 test: re
 	@$(call TEST); \

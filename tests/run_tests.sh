@@ -4,6 +4,7 @@ LOGS_DIRECTORY=logs
 
 mkdir -p $LOGS_DIRECTORY
 
-./vector > $LOGS_DIRECTORY/vector.log || exit 1
-./map > $LOGS_DIRECTORY/map.log || exit 1
-./stack > $LOGS_DIRECTORY/stack.log || exit 1
+./stl > $LOGS_DIRECTORY/stl.log || exit 1
+./ft > $LOGS_DIRECTORY/ft.log || exit 1
+
+diff $LOGS_DIRECTORY/stl.log $LOGS_DIRECTORY/ft.log > $LOGS_DIRECTORY/diff.log && rm $LOGS_DIRECTORY/diff.log
