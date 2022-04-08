@@ -2,7 +2,8 @@
 #define VECTOR_HPP
 
 #include <memory>
-#include "iterators.hpp"
+#include "random_access_iterator.hpp"
+#include "reverse_iterator.hpp"
 
 #define TWO_POWER_N(n) (1 << (n))
 #define TWO_POWER_64 TWO_POWER_N(64)
@@ -31,8 +32,8 @@ namespace ft {
 		typedef size_t size_type;
 
 		// iterators and const_iterators
-		typedef pointer iterator;
-		typedef const_pointer const_iterator;
+		typedef ft::random_access_iterator<value_type> iterator;
+		typedef ft::random_access_iterator<const value_type> const_iterator;
 		typedef ft::reverse_iterator<iterator> reverse_iterator;
 		typedef ft::reverse_iterator<const_iterator> const_reverse_iterator;
 
@@ -49,7 +50,7 @@ namespace ft {
 			// Default constructor
 			vector (const allocator_type& alloc = allocator_type())
 			{
-				_data = nullptr;
+				_data = NULL;
 				_size = 0;
 				_capacity = 0;
 				_alloc = alloc;
@@ -58,23 +59,22 @@ namespace ft {
 			// Fill constructor
 			vector (size_type n, const value_type& val = value_type(), const allocator_type& alloc = allocator_type())
 			{
-				_data = nullptr;
+				_data = NULL;
 				_size = 0;
 				_capacity = 0;
 				_alloc = alloc;
-				(void)n;
-				(void)val;
-				//for (size_type i = 0; i < n; i++) _alloc.construct(_data + i, val);
+				reserve(n);
+				for (size_type i = 0; i < n; i++) push_back(val);
 			}
 
 			// Range constructor
-			template <class InputIterator>
+/* 			template <class InputIterator>
 			vector (InputIterator first, InputIterator last, const allocator_type& alloc = allocator_type()) // TODO
 			{
 				(void)first;
 				(void)last;
 				(void)alloc;
-			} 
+			} */
 
 			// Copy constructor
 			vector (const vector& x) // TODO
@@ -123,7 +123,7 @@ namespace ft {
 			size_type size () const { return _size; }
 			size_type capacity () const { return _capacity; }
 			bool empty () const { return _size == 0; }
-			size_type max_size () const { return (4611686018427387903); } // replace by formula : TWO_POWER_64 / sizeof(value_type) - 1
+			size_type max_size () const { return (allocator_type().max_size()); }
 			void resize (size_type n, value_type val = value_type()); // TODO
 			void reserve (size_type n)
 			{

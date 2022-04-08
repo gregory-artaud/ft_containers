@@ -81,5 +81,5 @@ int main(void) {
 	}
 
 	std::cout << "Result: " << result << std::endl;
-	return 0;
+	return result;
 }
