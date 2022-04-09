@@ -69,13 +69,13 @@ namespace ft {
 			}
 
 			// Range constructor
-/* 			template <class InputIterator>
+			template <class InputIterator>
 			vector (InputIterator first, InputIterator last, const allocator_type& alloc = allocator_type()) // TODO
 			{
 				(void)first;
 				(void)last;
 				(void)alloc;
-			} */
+			}
 
 			// Copy constructor
 			vector (const vector& x) // TODO
@@ -95,14 +95,14 @@ namespace ft {
 			/*
 			** Iterators 
 			*/
-			iterator begin(); // TODO
-			const_iterator begin() const; // TODO
-			iterator end(); // TODO
-			const_iterator end() const; // TODO
-			reverse_iterator rbegin(); // TODO
-			const_reverse_iterator rbegin() const; // TODO
-			reverse_iterator rend(); // TODO
-			const_reverse_iterator rend() const; // TODO
+			iterator begin() { return _start; }
+			const_iterator begin() const { return _start; }
+			iterator end() { return ((empty()) ? begin() : _end ); }
+			const_iterator end() const { return ((empty()) ? begin() : _end ); }
+			reverse_iterator rbegin() { return reverse_iterator(end()); }
+			const_reverse_iterator rbegin() const { return reverse_iterator(end()); }
+			reverse_iterator rend() { return reverse_iterator(begin()); }
+			const_reverse_iterator rend() const { return reverse_iterator(begin()); }
 
 			/*
 			** Capacity

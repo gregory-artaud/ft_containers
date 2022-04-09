@@ -20,8 +20,8 @@ void printVectorData(const LIB::vector<int>& v) {
 	std::cout << "\t\t\tmax_size: " << v.max_size() << std::endl;
 	std::cout << "\t\t\tcapacity: " << v.capacity() << std::endl;
 	std::cout << "\t\t\tcontent: ";
-	/* for (size_t i = 0; i < v.size(); ++i)
-		std::cout << v[i] << " "; */
+	for (size_t i = 0; i < v.size(); ++i)
+		std::cout << v[i] << " ";
 	std::cout << std::endl;
 }
 
@@ -53,7 +53,7 @@ int main(void) {
 		// #2 Error here : the range constructor is called and idk why
 		{
 			std::cout << "\t\tTest fill constructor #2" << std::endl;
-			LIB::vector<int> v(10, 0);
+			LIB::vector<int> v((size_t)10, 0);
 
 			printVectorData(v);
 		}
