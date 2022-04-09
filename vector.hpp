@@ -38,9 +38,10 @@ namespace ft {
 		typedef ft::reverse_iterator<const_iterator> const_reverse_iterator;
 
 		private:
-			T* _data;
+			pointer _start;
+			pointer _end;
 			size_type _size;
-			size_type _capacity;
+			pointer _alloc_edge;
 			allocator_type _alloc;
 
 		public:
@@ -50,18 +51,18 @@ namespace ft {
 			// Default constructor
 			vector (const allocator_type& alloc = allocator_type())
 			{
-				_data = NULL;
-				_size = 0;
-				_capacity = 0;
+				_start = NULL;
+				_end = NULL;
+				_alloc_edge = NULL;
 				_alloc = alloc;
 			}
 
 			// Fill constructor
 			vector (size_type n, const value_type& val = value_type(), const allocator_type& alloc = allocator_type())
 			{
-				_data = NULL;
-				_size = 0;
-				_capacity = 0;
+				_start = NULL;
+				_end = NULL;
+				_alloc_edge = NULL;
 				_alloc = alloc;
 				reserve(n);
 				for (size_type i = 0; i < n; i++) push_back(val);
@@ -85,25 +86,11 @@ namespace ft {
 			// Default destructor
 			~vector ()
 			{
-				if (_data)
-				{
-					for (size_type i = 0; i < _size; i++)
-						_alloc.destroy(_data + i);
-					_alloc.deallocate(_data, _capacity);
-				}
+				clear();
+				_alloc.deallocate(_start, capacity());
 			}
 
-			vector& operator= (const vector& x)
-			{
-				for (size_type i = 0; i < _size; i++)
-						_alloc.destroy(_data + i);
-					_alloc.deallocate(_data, _capacity);
-				reserve(x._capacity);
-				for (size_type i = 0; i < x._size; i++)
-					_alloc.construct(_data + i, x._data[i]);
-				_size = x._size;
-				return *this;
-			}
+			vector& operator= (const vector& x) {} // TODO
 
 			/*
 			** Iterators 
@@ -120,36 +107,31 @@ namespace ft {
 			/*
 			** Capacity
 			*/
-			size_type size () const { return _size; }
-			size_type capacity () const { return _capacity; }
-			bool empty () const { return _size == 0; }
+			size_type size () const { return (_end - _start); }
+			size_type capacity () const { return (_alloc_edge - _start); }
+			bool empty () const { return (_start == _end); }
 			size_type max_size () const { return (allocator_type().max_size()); }
 			void resize (size_type n, value_type val = value_type()); // TODO
 			void reserve (size_type n)
 			{
-				if (n < _capacity) return;
-				pointer tmp = _alloc.allocate(n);
-				for (size_type i = 0; i < _size; i++)
-					_alloc.construct(tmp + i, _data[i]);
-				for (size_type i = 0; i < _size; i++)
-					_alloc.destroy(_data + i);
-				_alloc.deallocate(_data, _capacity);
-				_capacity = n;
-				_data = tmp;
+				if (n == capacity()) return;
+				if (n > max_size()) throw std::length_error("vector::reserve");
+				pointer old_start = _start;
+				pointer old_end = _end;
+
+				_start = _alloc.allocate(n);
+				_end = _start;
+				while (old_start != old_end)
+					_alloc.construct(_end++, *(old_start++));
+				_alloc.deallocate(old_start, capacity());
+				_alloc_edge = _start + n;
 			}
 
 			/*
 			** Element access
 			*/
-			reference operator[] (size_type n)
-			{
-				return _data[n];
-			}
-
-			const_reference operator[] (size_type n) const
-			{
-				return _data[n];
-			}
+			reference operator[] (size_type n) { return *(_start + n); }
+			const_reference operator[] (size_type n) const { return *(_start + n); }
 			reference at (size_type n); // TODO
 			const_reference at (size_type n) const; // TODO
 			reference front (); // TODO
@@ -211,14 +193,19 @@ namespace ft {
 
 			void push_back (const value_type& val)
 			{
-				if (_size == _capacity)
-					reserve(_capacity * 2);
-				_alloc.construct(_data + _size, val);
-				_size++;
+				if (size() == capacity())
+					reserve((capacity()) ? capacity() * 2 : 1);
+				_alloc.construct(_end++, val);
 			}
 			void pop_back (); // TODO
 			void swap (vector& x); // TODO
-			void clear(); // TODO
+			void clear()
+			{
+				size_type old_size = size();
+
+				for (size_type i = 0; i < old_size; i++)
+					_alloc.destroy(_start + i);
+			}
 
 			/*
 			** Allocator
