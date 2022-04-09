@@ -70,9 +70,14 @@ namespace ft {
 			}
 
 			// Copy constructor
-			vector (const vector& x) // TODO
+			vector (const vector& x)
 			{
-				(void)x;
+				_start = NULL;
+				_end = NULL;
+				_alloc_edge = NULL;
+				_alloc = x._alloc;
+				reserve(x.size());
+				for (size_type i = 0; i < x.size(); i++) push_back(x[i]);
 			}
 
 			// Default destructor

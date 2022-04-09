@@ -43,6 +43,7 @@ void test(const std::string testName, testFunction getTestedVector) {
 }
 
 LIB::vector<int>* test_default_constructor() { return new LIB::vector<int>(); }
+
 LIB::vector<int>* test_fill_constructor_1() { return new LIB::vector<int>(0); }
 LIB::vector<int>* test_fill_constructor_2() { return new LIB::vector<int>(1); }
 LIB::vector<int>* test_fill_constructor_3() { return new LIB::vector<int>(10); }
@@ -52,6 +53,11 @@ LIB::vector<int>* test_fill_constructor_6() { return new LIB::vector<int>((size_
 LIB::vector<int>* test_fill_constructor_7() { return new LIB::vector<int>((size_t)10, -10); }
 LIB::vector<int>* test_fill_constructor_8() { return new LIB::vector<int>((size_t)0, -10); }
 
+LIB::vector<int>* test_copy_constructor_1() { LIB::vector<int> v; return new LIB::vector<int>(v); }
+LIB::vector<int>* test_copy_constructor_2() { LIB::vector<int> v(1); return new LIB::vector<int>(v); }
+LIB::vector<int>* test_copy_constructor_3() { LIB::vector<int> v(10); return new LIB::vector<int>(v); }
+LIB::vector<int>* test_copy_constructor_4() { LIB::vector<int> v((size_t)10, -10); return new LIB::vector<int>(v); }
+
 int main(void) {
 	//std::cout << "Testing library: " << LIB_STR << std::endl;
 
@@ -59,6 +65,7 @@ int main(void) {
 	std::cout << "\tTest constructors" << std::endl;
 
 	test("\t\tTest default constructor #1", test_default_constructor);
+
 	test("\t\tTest fill constructor #1", test_fill_constructor_1);
 	test("\t\tTest fill constructor #2", test_fill_constructor_2);
 	test("\t\tTest fill constructor #3", test_fill_constructor_3);
@@ -67,5 +74,10 @@ int main(void) {
 	test("\t\tTest fill constructor #6", test_fill_constructor_6);
 	test("\t\tTest fill constructor #7", test_fill_constructor_7);
 	test("\t\tTest fill constructor #8", test_fill_constructor_8);
+	
+	test("\t\tTest copy constructor #1", test_copy_constructor_1);
+	test("\t\tTest copy constructor #2", test_copy_constructor_2);
+	test("\t\tTest copy constructor #3", test_copy_constructor_3);
+	test("\t\tTest copy constructor #4", test_copy_constructor_4);
 	return 0;
 }
