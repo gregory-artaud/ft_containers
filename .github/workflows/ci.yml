@@ -10,7 +10,7 @@ jobs:
     steps:
       - name: make
         uses: actions/checkout@v2
-        run: make
+          - run: make
 
   test:
     name: Test
@@ -19,7 +19,7 @@ jobs:
     steps:
       - name: Running tests
         uses: actions/checkout@v2
-        run: make test
+          - run: make test
 
       - name: Uploading logs
         uses: actions/upload-artifact@v2
