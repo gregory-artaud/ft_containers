@@ -19,6 +19,9 @@ namespace ft {
 				// Copy constructor
 				random_access_iterator(const random_access_iterator& it) : _data(it._data) {}
 
+				// Constructor from pointer
+				random_access_iterator(pointer data) : _data(data) {}
+
 				// Assignation operator
 				random_access_iterator& operator=(const random_access_iterator& rhs) {
 					_data = rhs._data;
@@ -29,6 +32,7 @@ namespace ft {
 				virtual ~random_access_iterator() {}
 
 				// Access operators
+				pointer base() const { return _data; }
 					// Dereference operator
 				reference operator*() const { return *_data; }
 					// Arrow operator
@@ -87,6 +91,19 @@ namespace ft {
 				pointer _data;
 
 		};
+}
+
+// Relational operators
+template <typename T>
+typename ft::random_access_iterator<T>::difference_type operator==(const ft::random_access_iterator<T> lhs, const ft::random_access_iterator<T> rhs)
+{
+	return (lhs.base() == rhs.base());
+}
+
+template <typename T>
+typename ft::random_access_iterator<T>::difference_type operator!=(const ft::random_access_iterator<T> lhs, const ft::random_access_iterator<T> rhs)
+{
+	return (lhs.base() != rhs.base());
 }
 
 #endif
