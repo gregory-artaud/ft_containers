@@ -4,7 +4,7 @@
 PROGRAMS	= stl ft
 DEPS_DIR	= iterators .
 TESTS_DIR	= tests
-TEST_EXE	= ./tests/run_tests.sh
+TEST_EXE	= ./tests/run_tests.sh > /dev/null 2>&1
 stl_OBJ		= tests/stl.o
 ft_OBJ		= tests/my_stl.o
 OBJECTS		=  $(stl_OBJ) $(ft_OBJ)
@@ -59,6 +59,8 @@ endef
 all: $(PROGRAMS)
 
 $(foreach prog, $(PROGRAMS), $(eval $(call PROGRAM_template,$(prog))))
+
+# This is used to build two objects from the same cpp file
 $(foreach obj, $(OBJECTS), $(eval $(call OBJ_template,$(obj),$(MAIN))))
 
 test: re
