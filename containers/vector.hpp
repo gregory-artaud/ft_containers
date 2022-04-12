@@ -14,8 +14,8 @@
 **
 ** TODO:
 **
-** - Recheck iterators (maybe implement random access iterator)
-** - Recheck if operators are neeeded (maybe add them)
+** - Recheck deallocation in reserve
+** - Do resize
 ** - Implement everything
 **
 */
@@ -62,7 +62,8 @@ namespace ft {
 
 			// Range constructor
 			template <class InputIterator>
-			vector (InputIterator first, InputIterator last, const allocator_type& alloc = allocator_type()) // TODO
+			vector (InputIterator first, InputIterator last, const allocator_type& alloc = allocator_type(),
+				typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type* = NULL)
 			{
 				_start = NULL;
 				_end = NULL;
@@ -136,7 +137,11 @@ namespace ft {
 				//if (old_start != NULL) _alloc.deallocate(old_start, capacity());
 				_alloc_edge = _start + n;
 			}
-			void resize (size_type n, value_type val = value_type()); // TODO
+			void resize (size_type n, value_type val = value_type()) // TODO
+			{
+				(void)n;
+				(void)val;
+			}
 
 			/*
 			** Element access
