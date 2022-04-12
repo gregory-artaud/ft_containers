@@ -35,18 +35,18 @@ TEST	= echo -ne $(L_GRAY)"Testing... "
 #
 # TEMPLATES
 #
-define TRY =
+define TRY
 $(1) && $(call OK) || ($(call FAIL) && exit 1);
 endef
 
-define PROGRAM_template =
+define PROGRAM_template
 $(1): $$($(1)_OBJ)
 	@$(call LINK,$(1)) ; \
 	$(call TRY,$(CC) $(CFLAGS) $$($(1)_OBJ) -o $(1))
 ALL_OBJS += $$($(1)_OBJ)
 endef
 
-define OBJ_template =
+define OBJ_template
 $(1): $(2)
 	@$(call BUILD,$(1)) ; \
 	$(call TRY,$(CC) $(CFLAGS) -D $(shell echo $(1) | cut -d '.' -f1 | cut -d '/' -f2)=1 -c $(2) -o $(1))
@@ -58,10 +58,10 @@ endef
 
 all: $(PROGRAMS)
 
-$(foreach prog, $(PROGRAMS), $(eval $(call PROGRAM_template,$(prog))))
+$(foreach prog,$(PROGRAMS),$(eval $(call PROGRAM_template,$(prog))))
 
 # This is used to build two objects from the same cpp file
-$(foreach obj, $(OBJECTS), $(eval $(call OBJ_template,$(obj),$(MAIN))))
+$(foreach obj,$(OBJECTS),$(eval $(call OBJ_template,$(obj),$(MAIN))))
 
 test: re
 	@$(call TEST); \

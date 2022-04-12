@@ -87,7 +87,7 @@ namespace ft {
 				_alloc.deallocate(_start, capacity());
 			}
 
-			vector& operator= (const vector& x) {} // TODO
+			vector& operator= (const vector& x); // TODO
 
 			/*
 			** Iterators 
