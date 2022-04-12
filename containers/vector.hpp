@@ -15,7 +15,7 @@
 ** TODO:
 **
 ** - Recheck deallocation in reserve
-** - Do resize
+** - Finnish resize
 ** - Implement everything
 **
 */
@@ -139,7 +139,12 @@ namespace ft {
 			}
 			void resize (size_type n, value_type val = value_type()) // TODO
 			{
-				(void)n;
+				if (n < size())
+					for (size_type i = n; i < size(); i++)
+						pop_back();
+				else if (n > size())
+					for (size_type i = size(); i < n; i++)
+						;//push_back(val);
 				(void)val;
 			}
 
@@ -213,9 +218,9 @@ namespace ft {
 					reserve((capacity()) ? capacity() * 2 : 1);
 				_alloc.construct(_end++, val);
 			}
-			void pop_back (); // TODO
+			void pop_back () { if (size() > 0) _alloc.destroy(_end--); }
 			void swap (vector& x); // TODO
-			void clear()
+			void clear ()
 			{
 				size_type old_size = size();
 
