@@ -2,8 +2,8 @@
 #define VECTOR_HPP
 
 #include <memory>
-#include "random_access_iterator.hpp"
-#include "reverse_iterator.hpp"
+#include "../iterators/random_access_iterator.hpp"
+#include "../iterators/reverse_iterator.hpp"
 
 #define TWO_POWER_N(n) (1 << (n))
 #define TWO_POWER_64 TWO_POWER_N(64)
@@ -64,9 +64,15 @@ namespace ft {
 			template <class InputIterator>
 			vector (InputIterator first, InputIterator last, const allocator_type& alloc = allocator_type()) // TODO
 			{
-				(void)first;
-				(void)last;
-				(void)alloc;
+				_start = NULL;
+				_end = NULL;
+				_alloc_edge = NULL;
+				_alloc = alloc;
+				while (first != last)
+				{
+					push_back(*first);
+					++first;
+				}
 			}
 
 			// Copy constructor
@@ -87,7 +93,15 @@ namespace ft {
 				_alloc.deallocate(_start, capacity());
 			}
 
-			vector& operator= (const vector& x); // TODO
+			vector& operator= (const vector& x)
+			{
+				if (this != &x)
+				{
+					clear();
+					for (size_type i = 0; i < x.size(); i++) push_back(x[i]);
+				}
+				return *this;
+			}
 
 			/*
 			** Iterators 
@@ -108,7 +122,6 @@ namespace ft {
 			size_type capacity () const { return (_alloc_edge - _start); }
 			bool empty () const { return (_start == _end); }
 			size_type max_size () const { return (allocator_type().max_size()); }
-			void resize (size_type n, value_type val = value_type()); // TODO
 			void reserve (size_type n)
 			{
 				if (n == capacity()) return;
@@ -120,9 +133,10 @@ namespace ft {
 				_end = _start;
 				while (old_start != old_end)
 					_alloc.construct(_end++, *(old_start++));
-				_alloc.deallocate(old_start, capacity());
+				//if (old_start != NULL) _alloc.deallocate(old_start, capacity());
 				_alloc_edge = _start + n;
 			}
+			void resize (size_type n, value_type val = value_type()); // TODO
 
 			/*
 			** Element access
@@ -201,7 +215,7 @@ namespace ft {
 				size_type old_size = size();
 
 				for (size_type i = 0; i < old_size; i++)
-					_alloc.destroy(_start + i);
+					_alloc.destroy(_end-- - i);
 			}
 
 			/*

@@ -91,19 +91,25 @@ namespace ft {
 				pointer _data;
 
 		};
-}
 
-// Relational operators
-template <typename T>
-typename ft::random_access_iterator<T>::difference_type operator==(const ft::random_access_iterator<T> lhs, const ft::random_access_iterator<T> rhs)
-{
-	return (lhs.base() == rhs.base());
-}
+	// Relational operators
+	template <typename T>
+	typename ft::random_access_iterator<T>::difference_type operator==(const ft::random_access_iterator<T> lhs, const ft::random_access_iterator<T> rhs)
+	{
+		return (lhs.base() == rhs.base());
+	}
 
-template <typename T>
-typename ft::random_access_iterator<T>::difference_type operator!=(const ft::random_access_iterator<T> lhs, const ft::random_access_iterator<T> rhs)
-{
-	return (lhs.base() != rhs.base());
+	template <typename T>
+	typename ft::random_access_iterator<T>::difference_type operator!=(const ft::random_access_iterator<T> lhs, const ft::random_access_iterator<T> rhs)
+	{
+		return (lhs.base() != rhs.base());
+	}
+
+	template <typename T>
+	typename ft::random_access_iterator<T>::difference_type operator-(const ft::random_access_iterator<T> lhs, const ft::random_access_iterator<T> rhs)
+	{
+		return (lhs.base() - rhs.base());
+	}
 }
 
 #endif
