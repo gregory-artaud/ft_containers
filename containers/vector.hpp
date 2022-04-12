@@ -2,8 +2,8 @@
 #define VECTOR_HPP
 
 #include <memory>
-#include "../iterators/random_access_iterator.hpp"
-#include "../iterators/reverse_iterator.hpp"
+#include "../includes/iterator/iterator.hpp" // replace with #include "iterator.hpp"
+#include "../includes/type_traits/type_traits.hpp" // replace with #include "iterator.hpp"
 
 #define TWO_POWER_N(n) (1 << (n))
 #define TWO_POWER_64 TWO_POWER_N(64)

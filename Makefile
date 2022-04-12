@@ -2,7 +2,7 @@
 # MAIN VARIABLES
 #
 PROGRAMS	= stl ft
-DEPS_DIR	= iterators containers
+DEPS_DIR	= includes containers
 TESTS_DIR	= tests
 TEST_EXE	= ./tests/run_tests.sh > /dev/null 2>&1
 stl_OBJ		= tests/stl.o
