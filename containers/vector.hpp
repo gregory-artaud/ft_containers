@@ -129,17 +129,19 @@ namespace ft {
 				if (n > max_size()) throw std::length_error("vector::reserve");
 				pointer old_start = _start;
 				pointer old_end = _end;
+				size_type old_size = size();
 
 				_start = _alloc.allocate(n);
 				_end = _start;
 				while (old_start != old_end)
 					_alloc.construct(_end++, *(old_start++));
-				//if (old_start != NULL) _alloc.deallocate(old_start, capacity());
+				if (old_start != NULL) _alloc.deallocate(old_start - old_size, capacity());
 				_alloc_edge = _start + n;
 			}
 			void resize (size_type n, value_type val = value_type()) // TODO
 			{
-				if (n < size())
+				if (n > max_size()) throw std::length_error("vector::resize");
+				else if (n < size())
 					for (size_type i = n; i < size(); i++)
 						pop_back();
 				else if (n > size())
@@ -153,12 +155,20 @@ namespace ft {
 			*/
 			reference operator[] (size_type n) { return *(_start + n); }
 			const_reference operator[] (size_type n) const { return *(_start + n); }
-			reference at (size_type n); // TODO
-			const_reference at (size_type n) const; // TODO
-			reference front (); // TODO
-			const_reference front () const; // TODO
-			reference back (); // TODO
-			const_reference back () const; // TODO
+			reference at (size_type n)
+			{
+				if (n >= size() || n < 0) throw std::out_of_range("vector::at");
+				return *(_start + n);
+			}
+			const_reference at (size_type n) const
+			{
+				if (n >= size() || n < 0) throw std::out_of_range("vector::at");
+				return *(_start + n);
+			}
+			reference front () { return *_start; }
+			const_reference front () const { return *_start; }
+			reference back () { return *(_end - 1); }
+			const_reference back () const { return *(_end - 1); }
 
 			/*
 			** Modifiers
@@ -214,18 +224,34 @@ namespace ft {
 
 			void push_back (const value_type& val)
 			{
-				if (size() == capacity())
-					reserve((capacity()) ? capacity() * 2 : 1);
+				size_type size = this->size();
+				if (size == capacity())
+					reserve((size) ? size * 2 : 1);
 				_alloc.construct(_end++, val);
 			}
-			void pop_back () { if (size() > 0) _alloc.destroy(_end--); }
-			void swap (vector& x); // TODO
+			void pop_back () { if (size() > 0) _alloc.destroy(--_end); }
+			void swap (vector& x)
+			{
+				pointer tmp;
+
+				tmp = _start;
+				_start = x._start;
+				x._start = tmp;
+
+				tmp = _end;
+				_end = x._end;
+				x._end = tmp;
+
+				tmp = _alloc_edge;
+				_alloc_edge = x._alloc_edge;
+				x._alloc_edge = tmp;
+			}
 			void clear ()
 			{
 				size_type old_size = size();
 
 				for (size_type i = 0; i < old_size; i++)
-					_alloc.destroy(_end-- - i);
+					pop_back();
 			}
 
 			/*
@@ -237,7 +263,6 @@ namespace ft {
 		private:
 			pointer _start;
 			pointer _end;
-			size_type _size;
 			pointer _alloc_edge;
 			allocator_type _alloc;
 	};

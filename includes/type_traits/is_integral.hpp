@@ -1,6 +1,8 @@
 #ifndef IS_INTEGRAL_HPP
 #define IS_INTEGRAL_HPP
 
+#include <uchar.h>
+
 namespace ft {
 	// Internal definitions
 	template <bool is_integral, typename T> struct is_integral_core {
@@ -21,8 +23,8 @@ namespace ft {
 	template <> struct is_integral_specs<long int> : public is_integral_core<true, long int> {};
 	template <> struct is_integral_specs<long long int> : public is_integral_core<true, long long int> {};
 	template <> struct is_integral_specs<unsigned char> : public is_integral_core<true, unsigned char> {};
-	template <> struct is_integral_specs<unsigned short int> : public is_integral_core<true, unsigned short int> {};
-	template <> struct is_integral_specs<unsigned int> : public is_integral_core<true, unsigned int> {};
+	//template <> struct is_integral_specs<unsigned short int> : public is_integral_core<true, unsigned short int> {};
+	//template <> struct is_integral_specs<unsigned int> : public is_integral_core<true, unsigned int> {};
 	template <> struct is_integral_specs<unsigned long int> : public is_integral_core<true, unsigned long int> {};
 	template <> struct is_integral_specs<unsigned long long int> : public is_integral_core<true, unsigned long long int> {};
 
