@@ -4,6 +4,7 @@
 #include <memory>
 #include "../includes/iterator/iterator.hpp" // replace with #include "iterator.hpp"
 #include "../includes/type_traits/type_traits.hpp" // replace with #include "iterator.hpp"
+#include "../includes/algorithm/algorithm.hpp" // replace with #include "algorithm.hpp"
 
 #define TWO_POWER_N(n) (1 << (n))
 #define TWO_POWER_64 TWO_POWER_N(64)
@@ -270,23 +271,29 @@ namespace ft {
 	** Relational operators
 	*/
 	template <class T, class Alloc>
-	bool operator== (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs); // TODO
+	bool operator== (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs)
+	{
+		if (lhs.size() != rhs.size()) return false;
+		for (size_t i = 0; i < lhs.size(); i++)
+			if (lhs[i] != rhs[i]) return false;
+		return true;
+	}
 	template <class T, class Alloc>
-	bool operator!= (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs); // TODO
+	bool operator!= (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs) { return !(lhs == rhs); }
 	template <class T, class Alloc>
-	bool operator<  (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs); // TODO
+	bool operator<  (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs) { return ft::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end()); }
 	template <class T, class Alloc>
-	bool operator<= (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs); // TODO
+	bool operator<= (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs) { return !(rhs < lhs); }
 	template <class T, class Alloc>
-	bool operator>  (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs); // TODO
+	bool operator>  (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs) { return rhs < lhs; }
 	template <class T, class Alloc>
-	bool operator>= (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs); // TODO
+	bool operator>= (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs) { return !(lhs < rhs); }
 
 	/*
 	** Swap
 	*/
 	template <class T, class Alloc>
-  	void swap (vector<T,Alloc>& x, vector<T,Alloc>& y); // TODO
+  	void swap (vector<T,Alloc>& x, vector<T,Alloc>& y) { x.swap(y); }
 }
 
 #endif
