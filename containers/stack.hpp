@@ -16,15 +16,15 @@
 namespace ft {
 	template <class T, class Container = ft::vector<T> > class stack
 	{
-		typedef T value_type;
-		typedef Container container_type;
-		typedef size_t size_type;
-
-		private:
-			container_type _container;
-
 		public:
-			stack (); // TODO
+			typedef T value_type;
+			typedef Container container_type;
+			typedef size_t size_type;
+
+			stack (const container_type& ctnr = container_type()) // TODO
+			{
+				_container = ctnr;
+			}
 
 			bool empty() const { return _container.empty(); }
 			size_type size() const { return _container.size(); }
@@ -32,6 +32,22 @@ namespace ft {
 			const value_type& top() const { return _container.back(); }
 			void push (const value_type& val) { _container.push_back(val); }
 			void pop() { _container.pop_back(); }
+
+			template <class Tp, class Ctnr>
+  			friend bool operator== (const stack<Tp,Ctnr>& lhs, const stack<Tp,Ctnr>& rhs);
+			template <class Tp, class Ctnr>
+  			friend bool operator!= (const stack<Tp,Ctnr>& lhs, const stack<Tp,Ctnr>& rhs);
+			template <class Tp, class Ctnr>
+  			friend bool operator< (const stack<Tp,Ctnr>& lhs, const stack<Tp,Ctnr>& rhs);
+			template <class Tp, class Ctnr>
+  			friend bool operator<= (const stack<Tp,Ctnr>& lhs, const stack<Tp,Ctnr>& rhs);
+			template <class Tp, class Ctnr>
+  			friend bool operator> (const stack<Tp,Ctnr>& lhs, const stack<Tp,Ctnr>& rhs);
+			template <class Tp, class Ctnr>
+  			friend bool operator>= (const stack<Tp,Ctnr>& lhs, const stack<Tp,Ctnr>& rhs);
+
+		protected:
+			container_type _container;
 	};
 	/*
 	** Relational operators
