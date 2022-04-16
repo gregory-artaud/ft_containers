@@ -16,8 +16,7 @@
 ** TODO:
 **
 ** - Recheck execution time and complexity of (2 fill) insert
-** - Finnish resize
-** - Implement everything
+** - assign
 **
 */
 
@@ -142,14 +141,20 @@ namespace ft {
 					_alloc.deallocate(old_start - old_size, old_capacity);
 				}
 			}
-			void resize (size_type n, value_type val = value_type()) // TODO
+			void resize (size_type n, value_type val = value_type())
 			{
 				if (n > max_size()) throw std::length_error("vector::resize");
 				else if (n < size())
-					for (size_type i = n; i <= size(); i++)
+				{
+					while (n < size())
+					{
 						pop_back();
+					}
+				}
 				else if (n > size())
+				{
 					insert(end(), n - size(), val);
+				}
 			}
 
 			/*
@@ -159,12 +164,12 @@ namespace ft {
 			const_reference operator[] (size_type n) const { return *(_start + n); }
 			reference at (size_type n)
 			{
-				if (n >= size() || n < 0) throw std::out_of_range("vector::at");
+				checkBounds(n);
 				return *(_start + n);
 			}
 			const_reference at (size_type n) const
 			{
-				if (n >= size() || n < 0) throw std::out_of_range("vector::at");
+				checkBounds(n);
 				return *(_start + n);
 			}
 			reference front () { return *_start; }
@@ -254,8 +259,36 @@ namespace ft {
 				}
 			}
 
-			iterator erase (iterator position); // TODO
-			iterator erase (iterator first, iterator last); // TODO
+			iterator erase (iterator position)
+			{
+				size_type index = &(*position) - _start;
+
+				if (position == end())
+				{
+					pop_back();
+				}
+				else
+				{
+					for (size_type i = index; i < size() - 1; i++)
+					{
+						_alloc.destroy(_start + i);
+						_alloc.construct(_start + i, _start[i + 1]);
+					}
+					_end--;
+				}
+				return iterator(_start + index);
+			}
+			iterator erase (iterator first, iterator last)
+			{
+				size_type last_index = &(*last) - _start;
+				size_type first_index = &(*first) - _start;
+				while (first_index != last_index)
+				{
+					first = erase(first);
+					first_index++;
+				}
+				return first;
+			}
 
 			void push_back (const value_type& val)
 			{
@@ -306,6 +339,14 @@ namespace ft {
 				if (size == capacity())
 				{
 					reserve((size) ? size * 2 : 1);
+				}
+			}
+
+			void checkBounds(size_type n) const
+			{
+				if ((n >= size()) || (n < 0))
+				{
+					throw std::out_of_range("vector::at");
 				}
 			}
 	};
