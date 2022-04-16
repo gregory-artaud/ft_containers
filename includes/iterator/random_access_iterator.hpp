@@ -187,7 +187,7 @@ namespace ft {
 	bool
 		operator>(const ft::random_access_iterator<T1> lhs, const ft::random_access_iterator<T2> rhs)
 	{
-		return (lhs.base() < rhs.base());
+		return (lhs.base() > rhs.base());
 	}
 
 	template <typename T1, typename T2>
