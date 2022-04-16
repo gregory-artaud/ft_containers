@@ -15,7 +15,7 @@
 **
 ** TODO:
 **
-** - Recheck deallocation in reserve
+** - Recheck execution time and complexity of (2 fill) insert
 ** - Finnish resize
 ** - Implement everything
 **
@@ -70,11 +70,7 @@ namespace ft {
 				_end = NULL;
 				_alloc_edge = NULL;
 				_alloc = alloc;
-				while (first != last)
-				{
-					push_back(*first);
-					++first;
-				}
+				while (first != last) push_back(*(first++));
 			}
 
 			// Copy constructor
@@ -126,29 +122,34 @@ namespace ft {
 			size_type max_size () const { return (allocator_type().max_size()); }
 			void reserve (size_type n)
 			{
-				if (n == capacity()) return;
+				if (n <= capacity()) return;
 				if (n > max_size()) throw std::length_error("vector::reserve");
+
 				pointer old_start = _start;
 				pointer old_end = _end;
 				size_type old_size = size();
+				size_type old_capacity = capacity();
 
 				_start = _alloc.allocate(n);
+				_alloc_edge = _start + n;
 				_end = _start;
 				while (old_start != old_end)
+				{
 					_alloc.construct(_end++, *(old_start++));
-				if (old_start != NULL) _alloc.deallocate(old_start - old_size, capacity());
-				_alloc_edge = _start + n;
+				}
+				if (old_start != NULL)
+				{
+					_alloc.deallocate(old_start - old_size, old_capacity);
+				}
 			}
 			void resize (size_type n, value_type val = value_type()) // TODO
 			{
 				if (n > max_size()) throw std::length_error("vector::resize");
 				else if (n < size())
-					for (size_type i = n; i < size(); i++)
+					for (size_type i = n; i <= size(); i++)
 						pop_back();
 				else if (n > size())
-					for (size_type i = size(); i < n; i++)
-						;//push_back(val);
-				(void)val;
+					insert(end(), n - size(), val);
 			}
 
 			/*
@@ -199,7 +200,27 @@ namespace ft {
 			 * 
 			 * @return Reference to the inserted element
 			 */
-			iterator insert (iterator position, const value_type& val); // TODO
+			iterator insert (iterator position, const value_type& val)
+			{
+				size_type index = &(*position) - _start;
+
+				if (position == end())
+				{
+					push_back(val);
+				}
+				else
+				{
+					checkSize();
+					for (size_type i = size(); i > index; i--)
+					{
+						_alloc.construct(_start + i, *(_start + i - 1));
+						_alloc.destroy(_start + i - 1);
+					}
+					_alloc.construct(_start + index, val);
+					_end++;
+				}
+				return iterator(_start + index);
+			}
 
 			/**
 			 * 
@@ -208,7 +229,13 @@ namespace ft {
 			 * @param val Value to be inserted
 			 * 
 			 */
-			void insert (iterator position, size_type n, const value_type& val); // TODO
+			void insert (iterator position, size_type n, const value_type& val) 
+			{
+				for (size_type i = 0; i < n; i++)
+				{
+					position = insert(position, val);
+				}
+			}
 
 			/**
 			 * 
@@ -218,16 +245,21 @@ namespace ft {
 			 * 
 			 */
 			template <class InputIterator>
-			void insert (iterator position, InputIterator first, InputIterator last); // TODO
+			void insert (iterator position, InputIterator first, InputIterator last,
+				typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type* = NULL)
+			{
+				while (first != last)
+				{
+					position = insert(position, *(--last));
+				}
+			}
 
 			iterator erase (iterator position); // TODO
 			iterator erase (iterator first, iterator last); // TODO
 
 			void push_back (const value_type& val)
 			{
-				size_type size = this->size();
-				if (size == capacity())
-					reserve((size) ? size * 2 : 1);
+				checkSize();
 				_alloc.construct(_end++, val);
 			}
 			void pop_back () { if (size() > 0) _alloc.destroy(--_end); }
@@ -266,6 +298,16 @@ namespace ft {
 			pointer _end;
 			pointer _alloc_edge;
 			allocator_type _alloc;
+
+			void checkSize(void)
+			{
+				size_type size = this->size();
+
+				if (size == capacity())
+				{
+					reserve((size) ? size * 2 : 1);
+				}
+			}
 	};
 	/*
 	** Relational operators
