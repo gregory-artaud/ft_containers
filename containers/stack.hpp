@@ -7,10 +7,6 @@
 ** 
 ** Documentation: https://www.cplusplus.com/reference/stack/stack/
 **
-** TODO:
-**
-** - Do and recheck constructors (maybe implement copy constructor)
-**
 */
 
 namespace ft {
@@ -21,7 +17,7 @@ namespace ft {
 			typedef Container container_type;
 			typedef size_t size_type;
 
-			stack (const container_type& ctnr = container_type()) // TODO
+			stack (const container_type& ctnr = container_type())
 			{
 				_container = ctnr;
 			}
