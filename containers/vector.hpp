@@ -15,8 +15,8 @@
 **
 ** TODO:
 **
-** - Recheck execution time and complexity of (2 fill) insert
-** - assign
+** - Recheck execution time and complexity of insert
+** - Recheck execution time and complexity of assign
 **
 */
 
@@ -181,30 +181,32 @@ namespace ft {
 			** Modifiers
 			*/
 			
-			/**
-			 * 
-			 * @param n Index of the element to be inserted
-			 * @param val Value to be inserted
-			 * 
-			 */
-			void assign (size_type n, const value_type& val); // TODO
+			void assign (size_type n, const value_type& val)
+			{
+				clear();
+				if (n == 0) return;
+				reserve(n);
+				for (size_type i = 0; i < n; i++) 
+				{
+					push_back(val);
+				}
+			}
 
-			/**
-			 * 
-			 * @param first First element of the range to be inserted
-			 * @param last Last element of the range to be inserted
-			 * 
-			 */
 			template <class InputIterator>
-  			void assign (InputIterator first, InputIterator last); // TODO
+  			void assign (InputIterator first, InputIterator last,
+				typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type* = NULL)
+			{
+				size_type n = ft::distance(first, last);
 
-			/**
-			 * 
-			 * @param n Index of the element to be inserted
-			 * @param val Value to be inserted
-			 * 
-			 * @return Reference to the inserted element
-			 */
+				clear();
+				if (n == 0) return;
+				reserve(n);
+				for (size_type i = 0; i < n; i++) 
+				{
+					push_back(*(first++));
+				}
+			}
+
 			iterator insert (iterator position, const value_type& val)
 			{
 				size_type index = &(*position) - _start;
@@ -227,13 +229,6 @@ namespace ft {
 				return iterator(_start + index);
 			}
 
-			/**
-			 * 
-			 * @param position Position of the element to be inserted
-			 * @param n Number of elements to be inserted
-			 * @param val Value to be inserted
-			 * 
-			 */
 			void insert (iterator position, size_type n, const value_type& val) 
 			{
 				for (size_type i = 0; i < n; i++)
@@ -242,13 +237,6 @@ namespace ft {
 				}
 			}
 
-			/**
-			 * 
-			 * @param position Position of the element to be inserted
-			 * @param first First element of the range to be inserted
-			 * @param last Last element of the range to be inserted
-			 * 
-			 */
 			template <class InputIterator>
 			void insert (iterator position, InputIterator first, InputIterator last,
 				typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type* = NULL)
