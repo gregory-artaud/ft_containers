@@ -6,9 +6,6 @@
 #include "../includes/type_traits/type_traits.hpp" // replace with #include "iterator.hpp"
 #include "../includes/algorithm/algorithm.hpp" // replace with #include "algorithm.hpp"
 
-#define TWO_POWER_N(n) (1 << (n))
-#define TWO_POWER_64 TWO_POWER_N(64)
-
 /*
 ** 
 ** Documentation: https://www.cplusplus.com/reference/vector/vector/
