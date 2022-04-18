@@ -6,4 +6,3 @@
   - std::pair (https://www.cplusplus.com/reference/utility/pair/)
   - std::make_pair (https://www.cplusplus.com/reference/utility/make_pair/)
   - map (https://www.cplusplus.com/reference/map/map/)
-  - stack (https://www.cplusplus.com/reference/stack/stack/)
