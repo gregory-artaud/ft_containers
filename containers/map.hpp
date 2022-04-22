@@ -2,8 +2,9 @@
 #define MAP_HPP
 
 #include <memory>
-#include <functional>
-#include <utility>
+#include "../includes/data_structure/data_structure.hpp"
+#include "../includes/functional/functional.hpp"
+#include "../includes/utility/utility.hpp"
 
 /*
 ** 
@@ -17,7 +18,8 @@
 */
 
 namespace ft {
-	template < class Key, class T, class Compare = std::less<Key>, class Alloc = std::allocator<std::pair<const Key,T> > > class map
+	template < class Key, class T, class Compare = ft::less<Key>,
+         class Alloc = std::allocator<ft::pair<const Key,T> > > class map
 	{
 		typedef Key key_type;
 		typedef T mapped_type;
