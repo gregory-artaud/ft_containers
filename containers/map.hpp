@@ -15,7 +15,6 @@
 ** - Recheck roadmap
 ** - Implement everything
 ** - value_comp and value_compare
-** - relational operators
 ** - iterators typedefs
 **
 */
@@ -125,7 +124,54 @@ namespace ft {
 	};
 
     template <class Key, class T, class Compare, class Alloc>
-    void swap(map<Key,T,Compare,Alloc>& x, map<Key,T,Compare,Alloc>& y); // TODO
+    void swap(map<Key,T,Compare,Alloc>& x, map<Key,T,Compare,Alloc>& y)
+    {
+        x.swap(y);
+    }
+
+    template <class Key, class T, class Compare, class Alloc>
+    bool operator==(const map<Key,T,Compare,Alloc>& lhs,
+        const map<Key,T,Compare,Alloc>& rhs)
+    {
+        if (lhs.size() != rhs.size()) return false;
+        return ft::equal(lhs.begin(), lhs.end(), rhs.begin());
+    }
+
+    template <class Key, class T, class Compare, class Alloc>
+    bool operator!=(const map<Key,T,Compare,Alloc>& lhs,
+                const map<Key,T,Compare,Alloc>& rhs)
+    {
+        return !(lhs == rhs);
+    }
+
+    template <class Key, class T, class Compare, class Alloc>
+    bool operator<(const map<Key,T,Compare,Alloc>& lhs,
+                const map<Key,T,Compare,Alloc>& rhs)
+    {
+        return ft::lexicographical_compare(lhs.begin(), lhs.end(),
+            rhs.begin(), rhs.end());
+    }
+
+    template <class Key, class T, class Compare, class Alloc>
+    bool operator<=(const map<Key,T,ComparemAlloc>& lhs,
+                const map<Key,T,Compare,Alloc>& rhs)
+    {
+        return !(rhs < lhs);
+    }
+
+    template <class Key, class T, class Compare, class Alloc>
+    bool operator>(const map<Key,T,Compare,Alloc>& lhs,
+                const map<Key,T,Compare,Alloc>& rhs)
+    {
+        return rhs < lhs;
+    }
+
+    template <class Key, class T, class Compare, class Alloc>
+    bool operator>=(const map<Key,T,Compare,Alloc>& lhs,
+                const map<Key,T,Compare,Alloc>& rhs)
+    {
+        return !(lhs < rhs);
+    }
 }
 
 #endif
