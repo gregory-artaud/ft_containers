@@ -35,10 +35,10 @@ namespace ft {
 			typedef typename allocator_type::const_pointer const_pointer;
 			
 			// iterators and const_iterators
-			typedef ft::bst_iterator<typename ft::BinarySearchTree<value_type, Compare, Alloc>::node_type> iterator;
-			typedef ft::bst_iterator<const typename ft::BinarySearchTree<value_type, Compare, Alloc>::node_type> const_iterator;
-			typedef ft::reverse_iterator<iterator> reverse_iterator;
-			typedef ft::reverse_iterator<const_iterator> const_reverse_iterator;
+			typedef typename ft::BinarySearchTree<value_type, Compare, Alloc>::iterator iterator;
+			typedef typename ft::BinarySearchTree<value_type, Compare, Alloc>::const_iterator const_iterator;
+			typedef typename ft::BinarySearchTree<value_type, Compare, Alloc>::reverse_iterator reverse_iterator;
+			typedef typename ft::BinarySearchTree<value_type, Compare, Alloc>::const_reverse_iterator const_reverse_iterator;
 
 			typedef typename ft::iterator_traits<iterator>::difference_type difference_type;
 			typedef size_t size_type;
@@ -80,19 +80,46 @@ namespace ft {
 			/*
 			** Iterators
 			*/
-            iterator begin(); // TODO
-            const_iterator begin() const; // TODO
-            iterator end(); // TODO
-            const_iterator end() const; // TODO
-            reverse_iterator rbegin(); // TODO
-            const_reverse_iterator rbegin() const; // TODO
-            reverse_iterator rend(); // TODO
-            const_reverse_iterator rend() const; // TODO
+            iterator begin()
+			{
+				return _tree.begin();
+			}
+            const_iterator begin() const
+			{
+				return _tree.begin();
+			}
+            iterator end()
+			{
+				return _tree.end();
+			}
+            const_iterator end() const
+			{
+				return _tree.end();
+			}
+			reverse_iterator rbegin()
+			{
+				return reverse_iterator(end());
+			}
+			const_reverse_iterator rbegin() const
+			{
+				return reverse_iterator(end());
+			}
+			reverse_iterator rend()
+			{
+				return reverse_iterator(begin());
+			}
+			const_reverse_iterator rend() const
+			{
+				return reverse_iterator(begin());
+			}
 
 			/*
 			** Capacity
 			*/
-            bool empty() const; // TODO
+            bool empty() const
+			{
+				return size() == 0;
+			}
             size_type max_size() const
             {
                 return allocator_type().max_size(); 

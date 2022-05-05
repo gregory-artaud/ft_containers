@@ -22,6 +22,14 @@ namespace ft
                 operator=(nd);
             }
 
+			BST_Node(const value_type& val)
+			{
+                _value = val;
+				_parent = NULL;
+                _left = NULL;
+                _right = NULL;
+			}
+
             ~BST_Node() {}
 
             BST_Node& operator=(const BST_Node& nd)
@@ -141,6 +149,11 @@ namespace ft
 					ret = tmp->_parent;
 				}
 				return ret;
+			}
+
+			bool isLeaf() const
+			{
+				return (!_left && !_right);
 			}
 
         private:
