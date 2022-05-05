@@ -3,6 +3,14 @@
 
 namespace ft
 {
+	enum e_sides
+	{
+		ERROR,
+		ROOT,
+		LEFT,
+		RIGHT
+	};
+
 	template <typename T>
     class BST_Node
     {
@@ -156,11 +164,57 @@ namespace ft
 				return (!_left && !_right);
 			}
 
+			const BST_Node* & getUniqueChild(int side) const
+			{
+				if (side == LEFT)
+				{
+					return _left;
+				}
+				else if (side == RIGHT)
+				{
+					return _right;
+				}
+				return NULL;
+			}
+
+			void unlinkParent(BST_Node* nd) const
+			{
+				int side = nd->_getSide();
+
+				if (side == LEFT)
+				{
+					nd->getParent()->setLeft(NULL);
+				}
+				else if (side == RIGHT)
+				{
+					nd->getParent()->setRight(NULL);
+				}
+				return ;
+			}
+
         private:
             value_type _value;
 			BST_Node* _parent;
             BST_Node* _left;
             BST_Node* _right;
+
+			int _getSide() const
+			{
+				if (!_parent)
+				{
+					return ROOT;
+				}
+				if (_parent->getLeft() == nd)
+				{
+					return LEFT;
+				}
+				if (_parent->getRight() == nd)
+				{
+					return RIGHT;
+				}
+				return ERROR;
+			}
+
     };
 }
 

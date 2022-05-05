@@ -97,7 +97,6 @@ namespace ft
 			node_pointer _start;
 			node_pointer _end;
             allocator_type _alloc;
-			enum e_sides { LEFT = 1, RIGHT };
 
 			bool _hasNoChild(node_pointer nd) const
 			{
@@ -106,6 +105,7 @@ namespace ft
 				ret = nd->isLeaf();
 				ret = ret || (nd->getLeft() == _start && !nd->getRight());
 				ret = ret || (nd->getRight() == _end && !nd->getLeft());
+				ret = ret || ((nd->getRight() == _end) && (nd->getLeft() == _start));
 				return ret;
 			}
 
@@ -121,6 +121,22 @@ namespace ft
 				node_pointer right = nd->getRight();
 
 				return (left && (left != _start) && right && (right != _end));
+			}
+
+			void _deleteNoChild(node_pointer nd)
+			{
+				int side = nd->getSide();
+				_alloc.destroy(nd);
+				_alloc.deallocate(nd);
+			}
+
+			void _deleteOneChild(node_pointer nd, int side)
+			{
+				node_pointer new_child = nd->getUniqueChild(side);
+				node_pointer parent = nd->getParent();
+
+				
+
 			}
     };
 }
