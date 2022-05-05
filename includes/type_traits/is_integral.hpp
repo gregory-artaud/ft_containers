@@ -1,7 +1,7 @@
 #ifndef IS_INTEGRAL_HPP
 #define IS_INTEGRAL_HPP
 
-#include <uchar.h>
+//#include <uchar.h> // doesn't compile on mac
 
 namespace ft {
 	// Internal definitions

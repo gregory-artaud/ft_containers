@@ -7,6 +7,7 @@
 namespace ft {
 	class input_iterator_tag {};
 	class random_access_iterator_tag {};
+	class bidirectional_iterator_tag {};
 
 	template <class Category, class T, class Distance = ptrdiff_t, class Pointer = T*, class Reference = T&>
 		class iterator {
