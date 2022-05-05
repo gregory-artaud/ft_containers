@@ -14,8 +14,8 @@
 ** TODO:
 **
 ** - Recheck roadmap
+** - Do BinarySearchTree
 ** - Implement everything
-** - value_comp and value_compare
 **
 */
 
@@ -28,7 +28,6 @@ namespace ft {
 			typedef T mapped_type;
 			typedef ft::pair<const key_type, mapped_type> value_type;
 			typedef Compare key_compare;
-			// typedef [...] value_compare;
 			typedef Alloc allocator_type;
 			typedef typename allocator_type::reference reference;
 			typedef typename allocator_type::const_reference const_reference;
@@ -40,13 +39,30 @@ namespace ft {
 			typedef ft::bst_iterator<const typename ft::BinarySearchTree<value_type, Compare, Alloc>::node_type> const_iterator;
 			typedef ft::reverse_iterator<iterator> reverse_iterator;
 			typedef ft::reverse_iterator<const_iterator> const_reverse_iterator;
-			
+
 			typedef typename ft::iterator_traits<iterator>::difference_type difference_type;
 			typedef size_t size_type;
+
+			class value_compare
+			{
+				friend class map;
+				protected:
+					Compare comp;
+					value_compare (Compare c) : comp(c) {}
+				public:
+					typedef bool result_type;
+					typedef value_type first_argument_type;
+					typedef value_type second_argument_type;
+					bool operator() (const value_type& x, const value_type& y) const
+					{
+						return comp(x.first, y.first);
+					}
+			};
 
 		private:
 			ft::BinarySearchTree<value_type, Compare, Alloc> _tree;
 			allocator_type _alloc;
+			key_compare _compare;
 		
 		public:
 			// Constructors and Destructor
@@ -128,6 +144,10 @@ namespace ft {
                 return allocator_type(_alloc);
             }
             key_compare key_comp() const; // TODO
+			value_compare value_comp() const
+			{
+				return value_compare(_compare);
+			}
 	};
 
     template <class Key, class T, class Compare, class Alloc>
