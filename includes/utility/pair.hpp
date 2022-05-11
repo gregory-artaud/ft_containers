@@ -4,7 +4,7 @@
 namespace ft
 {
     template <class T1, class T2>
-    class pair
+    struct pair
     {
         public:
             typedef T1 first_type;
@@ -14,7 +14,7 @@ namespace ft
             second_type second;
 
             // Default constructor
-            pair() {};
+            pair() : first(), second() {}
 
             // Copy constructor
             template <class U, class V>
@@ -25,8 +25,15 @@ namespace ft
 
             pair& operator=(const pair& pr)
             {
-                first = pr.first;
-                second = pr.second;
+                /*
+                if (*this == pr)
+                {
+                    return *this;
+                }
+                */
+                //first = pr.first;
+                //second = pr.second;
+                (void)pr;
                 return *this;
             }
     };

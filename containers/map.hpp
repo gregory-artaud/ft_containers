@@ -6,6 +6,7 @@
 #include "../includes/functional/functional.hpp"
 #include "../includes/utility/utility.hpp"
 #include "../includes/iterator/bst_iterator.hpp"
+#include "../includes/algorithm/algorithm.hpp"
 
 /*
 ** 
@@ -35,10 +36,10 @@ namespace ft {
 			typedef typename allocator_type::const_pointer const_pointer;
 			
 			// iterators and const_iterators
-			typedef typename ft::BinarySearchTree<value_type, Compare, Alloc>::iterator iterator;
-			typedef typename ft::BinarySearchTree<value_type, Compare, Alloc>::const_iterator const_iterator;
-			typedef typename ft::BinarySearchTree<value_type, Compare, Alloc>::reverse_iterator reverse_iterator;
-			typedef typename ft::BinarySearchTree<value_type, Compare, Alloc>::const_reverse_iterator const_reverse_iterator;
+			typedef typename ft::BinarySearchTree<value_type, Compare>::iterator iterator;
+			typedef typename ft::BinarySearchTree<value_type, Compare>::const_iterator const_iterator;
+			typedef typename ft::BinarySearchTree<value_type, Compare>::reverse_iterator reverse_iterator;
+			typedef typename ft::BinarySearchTree<value_type, Compare>::const_reverse_iterator const_reverse_iterator;
 
 			typedef typename ft::iterator_traits<iterator>::difference_type difference_type;
 			typedef size_t size_type;
@@ -60,22 +61,41 @@ namespace ft {
 			};
 
 		private:
-			ft::BinarySearchTree<value_type, Compare, Alloc> _tree;
+			ft::BinarySearchTree<value_type, Compare> _tree;
 			allocator_type _alloc;
 			key_compare _compare;
 		
 		public:
 			// Constructors and Destructor
 			map(const key_compare& comp = key_compare(),
-                const allocator_type& alloc = allocator_type()); // TODO
+                const allocator_type& alloc = allocator_type())
+            {
+                (void)comp;
+                (void)alloc;
+                // TODO
+            }
 
             template <class InputIterator>
             map(InputIterator first, InputIterator last, const key_compare& comp = key_compare(),
-                    const allocator_type& alloc = allocator_type()); // TODO
+                    const allocator_type& alloc = allocator_type())
+            {
+                (void)first;
+                (void)last;
+                (void)comp;
+                (void)alloc;
+                // TODO
+            }
             
-            map(const map& x); // TODO
+            map(const map& x)
+            {
+                (void)x;
+                // TODO
+            }
 
-			~map(); // TODO
+			~map()
+            {
+                // TODO
+            }
 
 			/*
 			** Iterators
@@ -124,43 +144,153 @@ namespace ft {
             {
                 return allocator_type().max_size(); 
             }
-            size_type size() const; // TODO
+            size_type size() const
+            {
+                // TODO
+                return 0;
+            }
 
 			/*
 			** Element access
 			*/
-            iterator lower_bound(const key_type& k); // TODO
-            const_iterator lower_bound(const key_type& k) const; // TODO
-            iterator upper_bound(const key_type& k); // TODO
-            const_iterator upper_bound(const key_type& k) const; // TODO
-            mapped_type& operator[](const key_type& k); // TODO
+            iterator lower_bound(const key_type& k)
+            {
+                // TODO
+                (void)k;
+                return iterator();
+            }
+
+            const_iterator lower_bound(const key_type& k) const
+            {
+                // TODO
+                (void)k;
+                return const_iterator();
+            }
+
+            iterator upper_bound(const key_type& k)
+            {
+                // TODO
+                (void)k;
+                return iterator();
+            }
+
+            const_iterator upper_bound(const key_type& k) const
+            {
+                // TODO
+                (void)k;
+                return const_iterator();
+            }
+
+            mapped_type& operator[](const key_type& k)
+            {
+                // TODO
+                (void)k;
+                return mapped_type();
+            }
 
 			/*
 			** Modifiers
 			*/
-            void erase(iterator position); // TODO
-            size_type erase(const key_type& k); // TODO
-            void erase(iterator first, iterator last); // TODO
-            void clear(); // TODO
-            ft::pair<iterator,bool> insert(const value_type& val); // TODO
-            iterator insert(iterator position, const value_type& val); // TODO
+            void erase(iterator position)
+            {
+                (void)position;
+                // TODO
+            }
+
+            size_type erase(const key_type& k)
+            {
+                // TODO
+                (void)k;
+                return size_type();
+            }
+
+            void erase(iterator first, iterator last)
+            {
+                // TODO
+                (void)first;
+                (void)last;
+            }
+
+            void clear()
+            {
+                // TODO
+            }
+
+            ft::pair<iterator,bool> insert(const value_type& val)
+            {
+                // TODO
+                (void)val;
+                return ft::pair<iterator,bool>();
+            }
+
+            iterator insert(iterator position, const value_type& val)
+            {
+                // TODO
+                (void)position;
+                (void)val;
+                return iterator();
+            }
+
             template <class InputIterator>
-            void insert(InputIterator first, InputIterator last); // TODO
+            void insert(InputIterator first, InputIterator last)
+            {
+                // TODO
+                (void)first;
+                (void)last;
+            }
 
 			/*
 			** Observers
 			*/
-            size_type count(const key_type& k) const; // TODO
-            ft::pair<const_iterator,const_iterator> equal_range(const key_type& k) const; // TODO
-            ft::pair<iterator,iterator> equal_range(const key_type& k); // TODO
-            iterator find(const key_type& k); // TODO
-            const_iterator find(const key_type& k) const; // TODO
+            size_type count(const key_type& k) const
+            {
+                // TODO
+                (void)k;
+                return size_type();
+            }
+
+            ft::pair<const_iterator,const_iterator> equal_range(const key_type& k) const
+            {
+                // TODO
+                (void)k;
+                return ft::pair<const_iterator,const_iterator>();
+            }
+
+            ft::pair<iterator,iterator> equal_range(const key_type& k)
+            {
+                // TODO
+                (void)k;
+                return ft::pair<iterator,iterator>();
+            }
+
+            iterator find(const key_type& k)
+            {
+                // TODO
+                (void)k;
+                return iterator();
+            }
+
+            const_iterator find(const key_type& k) const
+            {
+                // TODO
+                (void)k;
+                return const_iterator();
+            }
 
 			/*
 			** Operations
 			*/
-            map& operator=(const map& x); // TODO
-            void swap(map& x); // TODO
+            map& operator=(const map& x)
+            {
+                // TODO
+                (void)x;
+                return *this;
+            }
+            void swap(map& x)
+            {
+                // TODO
+                (void)x;
+            }
 
 			/*
 			** Allocator and Compare
@@ -170,7 +300,12 @@ namespace ft {
             {
                 return allocator_type(_alloc);
             }
-            key_compare key_comp() const; // TODO
+
+            key_compare key_comp() const
+            {
+                // TODO
+            }
+
 			value_compare value_comp() const
 			{
 				return value_compare(_compare);

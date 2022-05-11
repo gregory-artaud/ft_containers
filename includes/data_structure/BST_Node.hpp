@@ -3,27 +3,13 @@
 
 namespace ft
 {
-	enum e_sides
-	{
-		ERROR,
-		ROOT,
-		LEFT,
-		RIGHT
-	};
-
 	template <typename T>
     class BST_Node
     {
         public:
             typedef T value_type;
 
-            BST_Node()
-            {
-                _value = value_type();
-				_parent = NULL;
-                _left = NULL;
-                _right = NULL;
-            }
+            BST_Node() : value(), parent(NULL), left(NULL), right(NULL) {}
 
             BST_Node(const BST_Node& nd)
             {
@@ -32,87 +18,43 @@ namespace ft
 
 			BST_Node(const value_type& val)
 			{
-                _value = val;
-				_parent = NULL;
-                _left = NULL;
-                _right = NULL;
+                value = val;
+				parent = NULL;
+                left = NULL;
+                right = NULL;
 			}
 
             ~BST_Node() {}
 
             BST_Node& operator=(const BST_Node& nd)
             {
-                _value = nd._value;
-                _left = nd._left;
-                _right = nd._right;
-				_parent = nd._parent;
+                value = nd.value;
+                left = nd.left;
+                right = nd.right;
+				parent = nd.parent;
                 return *this;
             }
 
-            BST_Node* const & getLeft() const
-            {
-                return _left;
-            }
-
-            BST_Node* const & getRight() const
-            {
-                return _right;
-            }
-
-			BST_Node* const & getParent() const
-			{
-				return _parent;
-			}
-
-            value_type const & getValue() const
-            {
-                return _value;
-            }
-
-            BST_Node& setValue(const value_type& val)
-            {
-                _value = val;
-                return *this;
-            }
-
-            BST_Node& setLeft(const BST_Node*& nd)
-            {
-                _left = nd;
-                return *this;
-            }
-
-            BST_Node& setRight(const BST_Node*& nd)
-            {
-                _right = nd;
-                return *this;
-            }
-
-            BST_Node& setParent(const BST_Node*& nd)
-            {
-                _parent = nd;
-                return *this;
-            }
-
-			BST_Node* findMinimum(BST_Node* nd)
+			BST_Node* findMinimum(BST_Node* nd) const
 			{
 				if (!nd)
 				{
 					return NULL;
 				}
-				while (nd->_left)
+				while (nd->left)
 				{
 					nd = nd->left;
 				}
 				return nd;
 			}
 
-			BST_Node* findMaximum(BST_Node* nd)
+			BST_Node* findMaximum(BST_Node* nd) const
 			{
 				if (!nd)
 				{
 					return NULL;
 				}
-				while (nd->_right)
+				while (nd->right)
 				{
 					nd = nd->right;
 				}
@@ -125,16 +67,16 @@ namespace ft
 				BST_Node* tmp;
 
 				tmp = this;
-				if (tmp->_left)
+				if (tmp->left)
 				{
-					return findMaximum(tmp->_left);
+					return findMaximum(tmp->left);
 				}
 				// climbing the tree until tmp is the right child of ret
-				ret = tmp->_parent;
-				while (ret && ret->_left == tmp)
+				ret = tmp->parent;
+				while (ret && ret->left == tmp)
 				{
 					tmp = ret;
-					ret = tmp->_parent;
+					ret = tmp->parent;
 				}
 				return ret;
 			}
@@ -142,79 +84,40 @@ namespace ft
 			BST_Node* next() const
 			{
 				BST_Node* ret;
-				BST_Node* tmp;
+				BST_Node tmp;
 
-				tmp = this;
-				if (tmp->_right)
+				tmp = *this;
+				if (tmp.right)
 				{
-					return findMinimum(tmp->_right);
+					return findMinimum(tmp.right);
 				}
 				// climbing the tree until tmp is the left child of ret
-				ret = tmp->_parent;
-				while (ret && ret->_right == tmp)
+				ret = tmp.parent;
+				while (ret && *(ret->right) == tmp)
 				{
-					tmp = ret;
-					ret = tmp->_parent;
+					tmp = *ret;
+					ret = tmp.parent;
 				}
 				return ret;
 			}
 
 			bool isLeaf() const
 			{
-				return (!_left && !_right);
+				return (!left && !right);
 			}
 
-			const BST_Node* & getUniqueChild(int side) const
-			{
-				if (side == LEFT)
-				{
-					return _left;
-				}
-				else if (side == RIGHT)
-				{
-					return _right;
-				}
-				return NULL;
-			}
+            bool operator==(const BST_Node& nd) const
+            {
+                return (value == nd.value &&
+                        parent == nd.parent &&
+                        left == nd.left &&
+                        right == nd.right);
+            }
 
-			void unlinkParent(BST_Node* nd) const
-			{
-				int side = nd->_getSide();
-
-				if (side == LEFT)
-				{
-					nd->getParent()->setLeft(NULL);
-				}
-				else if (side == RIGHT)
-				{
-					nd->getParent()->setRight(NULL);
-				}
-				return ;
-			}
-
-        private:
-            value_type _value;
-			BST_Node* _parent;
-            BST_Node* _left;
-            BST_Node* _right;
-
-			int _getSide() const
-			{
-				if (!_parent)
-				{
-					return ROOT;
-				}
-				if (_parent->getLeft() == nd)
-				{
-					return LEFT;
-				}
-				if (_parent->getRight() == nd)
-				{
-					return RIGHT;
-				}
-				return ERROR;
-			}
-
+            value_type value;
+			BST_Node* parent;
+            BST_Node* left;
+            BST_Node* right;
     };
 }
 
