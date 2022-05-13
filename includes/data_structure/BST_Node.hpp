@@ -71,6 +71,28 @@ namespace ft
 				return nd;
 			}
 
+            BST_Node* findMinimum(void) const
+            {
+                BST_Node* tmp = (BST_Node*)this;
+
+                while (tmp->left)
+                {
+                    tmp = tmp->left;
+                }
+                return tmp;
+            }
+
+            BST_Node* findMaximum(void) const
+            {
+                BST_Node* tmp = (BST_Node*)this;
+
+                while (tmp->right)
+                {
+                    tmp = tmp->right;
+                }
+                return tmp;
+            }
+
 			BST_Node* previous() const
 			{
 				BST_Node* ret;

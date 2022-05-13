@@ -146,8 +146,7 @@ namespace ft {
             }
             size_type size() const
             {
-                // TODO
-                return 0;
+                return _tree.size();
             }
 
 			/*

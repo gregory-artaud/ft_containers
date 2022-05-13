@@ -31,9 +31,11 @@ namespace ft
             {
                 _alloc = allocator;
 
-                _root = _alloc.allocate(1);
-                _alloc.construct(_root, node_type());
+                _start = _alloc.allocate(1);
+                _alloc.construct(_start, node_type());
 				_end = _alloc.allocate(1);
+                _size = 0;
+                _root = NULL;
             }
 
             ~BinarySearchTree()
@@ -44,11 +46,11 @@ namespace ft
 
 			iterator begin()
 			{
-				return iterator(_root);
+				return iterator(_start->parent);
 			}
 			const_iterator begin() const
 			{
-				return const_iterator(_root);
+				return const_iterator(_start->parent);
 			}
 			iterator end()
 			{
@@ -66,15 +68,39 @@ namespace ft
 
             node_pointer searchByKey(value_type toSearch)
             {
-                // TODO
-                (void)toSearch;
-                return _root;
+               if (!_root)
+               {
+                   return NULL;
+               }
+               return _searchByKey(toSearch, _root);
+            }
+
+            size_type size() const
+            {
+                return _size;
             }
 
         private:
+            node_pointer _start;
             node_pointer _root;
 			node_pointer _end;
             allocator_type _alloc;
+            size_type _size;
+
+            node_pointer _searchByKey(value_type toSearch, node_pointer nd)
+            {
+                value_type ndValue = nd->value;
+
+                if (ndValue.first == toSearch.first)
+                {
+                    return nd;
+                }
+                if (ndValue.first < toSearch.first)
+                {
+                    return _searchByKey(toSearch, nd->right);
+                }
+                return _searchByKey(toSearch, nd->left);
+            }
     };
 }
 #endif
