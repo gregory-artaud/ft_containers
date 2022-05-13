@@ -21,7 +21,7 @@ namespace ft {
 
 				// Constructor from pointer
 				bst_iterator(T* data) : _data(data) {}
-
+                
 				// Assignation operator
 				bst_iterator& operator=(const bst_iterator& rhs) {
 					_data = rhs._data;
@@ -66,12 +66,12 @@ namespace ft {
                     return (ret);
                 }
 
-                bool operator==(const bst_iterator& bst_it)
+                bool operator==(const bst_iterator& bst_it) const
                 {
                     return (this->_data == bst_it._data);
                 }
 
-                bool operator!=(const bst_iterator& bst_it)
+                bool operator!=(const bst_iterator& bst_it) const
                 {
                     return (this->_data != bst_it._data);
                 }
@@ -96,6 +96,9 @@ namespace ft {
 
 				// Constructor from pointer
 				bst_const_iterator(T* data) : _data(data) {}
+
+                // Constructor from iterator
+                bst_const_iterator(const bst_iterator<T,Compare>& it) : _data(it.base()) {}
 
 				// Assignation operator
 				bst_const_iterator& operator=(const bst_const_iterator& rhs) {
@@ -141,12 +144,12 @@ namespace ft {
                     return (ret);
                 }
 
-                bool operator==(const bst_const_iterator& bst_it)
+                bool operator==(const bst_const_iterator& bst_it) const
                 {
                     return (this->_data == bst_it._data);
                 }
 
-                bool operator!=(const bst_const_iterator& bst_it)
+                bool operator!=(const bst_const_iterator& bst_it) const
                 {
                     return (this->_data != bst_it._data);
                 }

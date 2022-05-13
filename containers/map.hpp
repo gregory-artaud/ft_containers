@@ -185,7 +185,7 @@ namespace ft {
             {
                 // TODO
                 (void)k;
-                return mapped_type();
+                return _tree.searchByKey(value_type())->value.second;
             }
 
 			/*
@@ -304,6 +304,7 @@ namespace ft {
             key_compare key_comp() const
             {
                 // TODO
+                return key_compare();
             }
 
 			value_compare value_comp() const

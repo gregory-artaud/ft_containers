@@ -64,19 +64,19 @@ namespace ft
 			BST_Node* previous() const
 			{
 				BST_Node* ret;
-				BST_Node* tmp;
+				BST_Node tmp;
 
-				tmp = this;
-				if (tmp->left)
+				tmp = *this;
+				if (tmp.left)
 				{
-					return findMaximum(tmp->left);
+					return findMaximum(tmp.left);
 				}
 				// climbing the tree until tmp is the right child of ret
-				ret = tmp->parent;
-				while (ret && ret->left == tmp)
+				ret = tmp.parent;
+				while (ret && *(ret->left) == tmp)
 				{
-					tmp = ret;
-					ret = tmp->parent;
+					tmp = *ret;
+					ret = tmp.parent;
 				}
 				return ret;
 			}

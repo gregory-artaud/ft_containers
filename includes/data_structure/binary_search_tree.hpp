@@ -9,7 +9,8 @@
 
 namespace ft
 {
-    template <typename T, class Compare = ft::less<T>, class Node = ft::BST_Node<T>,
+    template <typename T, class Compare = ft::less<T>,
+        class Node = ft::BST_Node<T>,
         class Alloc = std::allocator<Node> >
     class BinarySearchTree
     {
@@ -64,6 +65,13 @@ namespace ft
             void clear()
             {
                 // TODO
+            }
+
+            node_pointer searchByKey(value_type toSearch)
+            {
+                // TODO
+                (void)toSearch;
+                return _start->parent;
             }
 
         private:
