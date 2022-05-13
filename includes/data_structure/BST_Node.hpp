@@ -6,6 +6,14 @@ namespace ft
 	template <typename T>
     class BST_Node
     {
+        private:
+            void copyLinks(const BST_Node& nd)
+            {
+                parent = nd.parent;
+                left= nd.left;
+                right = nd.right;
+            }
+
         public:
             typedef T value_type;
 
@@ -13,7 +21,8 @@ namespace ft
 
             BST_Node(const BST_Node& nd)
             {
-                operator=(nd);
+                copyLinks(nd);
+                value = nd.value;
             }
 
 			BST_Node(const value_type& val)
@@ -28,10 +37,11 @@ namespace ft
 
             BST_Node& operator=(const BST_Node& nd)
             {
-                value = nd.value;
-                left = nd.left;
-                right = nd.right;
-				parent = nd.parent;
+                if (this != &nd)
+                {
+                    value = nd.value;
+                    copyLinks(nd);
+                }
                 return *this;
             }
 
@@ -64,19 +74,18 @@ namespace ft
 			BST_Node* previous() const
 			{
 				BST_Node* ret;
-				BST_Node tmp;
+				BST_Node* tmp = (BST_Node*)this;
 
-				tmp = *this;
-				if (tmp.left)
+				if (tmp->left)
 				{
-					return findMaximum(tmp.left);
+					return findMaximum(tmp->left);
 				}
 				// climbing the tree until tmp is the right child of ret
-				ret = tmp.parent;
-				while (ret && *(ret->left) == tmp)
+				ret = tmp->parent;
+				while (ret && ret->left == tmp)
 				{
-					tmp = *ret;
-					ret = tmp.parent;
+					tmp = ret;
+					ret = tmp->parent;
 				}
 				return ret;
 			}
@@ -84,19 +93,18 @@ namespace ft
 			BST_Node* next() const
 			{
 				BST_Node* ret;
-				BST_Node tmp;
+				BST_Node* tmp = (BST_Node*)this;
 
-				tmp = *this;
-				if (tmp.right)
+				if (right)
 				{
-					return findMinimum(tmp.right);
+					return findMinimum(right);
 				}
 				// climbing the tree until tmp is the left child of ret
-				ret = tmp.parent;
-				while (ret && *(ret->right) == tmp)
+				ret = parent;
+				while (ret && ret->right == tmp)
 				{
-					tmp = *ret;
-					ret = tmp.parent;
+					tmp = ret;
+					ret = tmp->parent;
 				}
 				return ret;
 			}
@@ -105,13 +113,15 @@ namespace ft
 			{
 				return (!left && !right);
 			}
+            
+            bool isRoot() const
+            {
+                return (!parent);
+            }
 
             bool operator==(const BST_Node& nd) const
             {
-                return (value == nd.value &&
-                        parent == nd.parent &&
-                        left == nd.left &&
-                        right == nd.right);
+                return (value == nd.value);
             }
 
             value_type value;

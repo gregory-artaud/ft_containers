@@ -31,27 +31,24 @@ namespace ft
             {
                 _alloc = allocator;
 
-				_start = _alloc.allocate(1);
-				_alloc.construct(_start, node_type());
+                _root = _alloc.allocate(1);
+                _alloc.construct(_root, node_type());
 				_end = _alloc.allocate(1);
-				_start->parent = _end;
             }
 
             ~BinarySearchTree()
 			{
 				clear();
 				_alloc.deallocate(_end, 1);
-				_alloc.destroy(_start);
-				_alloc.deallocate(_start, 1);
 			}
 
 			iterator begin()
 			{
-				return iterator(_start->left);
+				return iterator(_root);
 			}
 			const_iterator begin() const
 			{
-				return const_iterator(_start->left);
+				return const_iterator(_root);
 			}
 			iterator end()
 			{
@@ -71,11 +68,11 @@ namespace ft
             {
                 // TODO
                 (void)toSearch;
-                return _start->parent;
+                return _root;
             }
 
         private:
-			node_pointer _start;
+            node_pointer _root;
 			node_pointer _end;
             allocator_type _alloc;
     };
