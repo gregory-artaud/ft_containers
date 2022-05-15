@@ -89,6 +89,11 @@ namespace ft
 
             node_pointer _searchByKey(value_type toSearch, node_pointer nd)
             {
+                if (!nd)
+                {
+                    return NULL;
+                }
+
                 value_type ndValue = nd->value;
 
                 if (ndValue.first == toSearch.first)

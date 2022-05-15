@@ -63,38 +63,36 @@ namespace ft {
 		private:
 			ft::BinarySearchTree<value_type, Compare> _tree;
 			allocator_type _alloc;
-			key_compare _compare;
+			key_compare _comp;
 		
 		public:
 			// Constructors and Destructor
 			map(const key_compare& comp = key_compare(),
                 const allocator_type& alloc = allocator_type())
             {
-                (void)comp;
-                (void)alloc;
-                // TODO
+                _alloc = alloc;
+                _comp = comp;
             }
 
             template <class InputIterator>
             map(InputIterator first, InputIterator last, const key_compare& comp = key_compare(),
                     const allocator_type& alloc = allocator_type())
             {
-                (void)first;
-                (void)last;
-                (void)comp;
-                (void)alloc;
-                // TODO
+                _alloc = alloc;
+                _comp = comp;
+                insert(first, last);
             }
             
             map(const map& x)
             {
-                (void)x;
-                // TODO
+                _alloc = x.get_allocator();
+                _comp = x.key_comp();
+                insert(x.begin(), x.end());
             }
 
 			~map()
             {
-                // TODO
+                clear();
             }
 
 			/*
@@ -182,9 +180,7 @@ namespace ft {
 
             mapped_type& operator[](const key_type& k)
             {
-                // TODO
-                (void)k;
-                return _tree.searchByKey(value_type())->value.second;
+                return (*((insert(ft::make_pair(k, mapped_type()))).first)).second;
             }
 
 			/*
@@ -212,7 +208,7 @@ namespace ft {
 
             void clear()
             {
-                // TODO
+                erase(begin(), end());
             }
 
             ft::pair<iterator,bool> insert(const value_type& val)
@@ -302,13 +298,12 @@ namespace ft {
 
             key_compare key_comp() const
             {
-                // TODO
-                return key_compare();
+                return key_compare(_comp);
             }
 
 			value_compare value_comp() const
 			{
-				return value_compare(_compare);
+				return value_compare(_comp);
 			}
 	};
 
