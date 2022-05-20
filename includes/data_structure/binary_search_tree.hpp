@@ -65,6 +65,14 @@ namespace ft
 			{
 				return const_iterator(_end);
 			}
+
+            size_type erase(const value_type& val)
+            {
+                size_type initialSize = _size;
+
+                _deleteByKey(_root, val);
+                return (initialSize - _size);
+            }
             
             void clear()
             {
@@ -105,6 +113,11 @@ namespace ft
                 return ft::make_pair<iterator,bool>(iterator(position), newNodeHasBeenInserted);
             }
 
+            bool isLeaf(const node_type& nd) const
+            {
+                return nd.isLeaf() || (nd.left == _start && nd.right == _end);
+            }
+
         private:
             node_pointer _start;
             node_pointer _root;
@@ -112,6 +125,98 @@ namespace ft
             allocator_type _alloc;
             compare_type _comp;
             size_type _size;
+
+            node_pointer _deleteByKey(node_pointer root, const value_type& val)
+            {
+                if (!root)
+                {
+                    return NULL;
+                }
+                // Going in right subtree
+                if (_comp(root->value.first, val.first))
+                {
+                    // Special case to keep iterators consistency
+                    if (root->right == _end)
+                    {
+                        return NULL;
+                    }
+                    else
+                    {
+                        root->right = _deleteByKey(root->right, val);
+                    }
+                }
+                // Going in left subtree
+                else if (_comp(val.first, root->value.first))
+                {
+                    // Special case to keep iterators consistency
+                    if (root->left == _start)
+                    {
+                        return NULL;
+                    }
+                    else
+                    {
+                        root->left = _deleteByKey(root->left, val);
+                    }
+                }
+                // Deletion happens here
+                else
+                {
+                    // root is leaf
+                    if (isLeaf(*root))
+                    {
+                        _destroy(root);
+                        return NULL;
+                    }
+                    // root has right child
+                    else if (root->left == NULL || root->left == _start)
+                    {
+                        node_pointer tmp = root->right;
+
+                        _destroy(root);
+                        return tmp;
+                    }
+                    // root has left child
+                    else if (root->right == NULL || root->right == _end)
+                    {
+                        node_pointer tmp = root->left;
+
+                        _destroy(root);
+                        return tmp;
+                    }
+                    // root has both left and right child
+                    else
+                    {
+                        root->value = _getMin(root->right)->value;
+                        root->right = _deleteByKey(root->right, root->value);
+                    }
+                }
+                return root;
+            }
+
+            void _unlink(node_pointer node)
+            {
+                if (node->isRoot())
+                {
+                    _start->parent = NULL;
+                    return ;
+                }
+                if (node->left == _start)
+                {
+                    node->parent->left = _start;
+                    _start->parent = node->parent->left;
+                }
+                if (node->right == _end)
+                {
+                    node->parent->right = _end;
+                }
+            }
+
+            void _destroy(node_pointer node)
+            {
+                _unlink(node);
+                _alloc.destroy(node);
+                _alloc.deallocate(node, 1);
+            }
 
             node_pointer _getNewNode(const value_type& val = value_type())
             {
@@ -121,9 +226,9 @@ namespace ft
                 return newNode;
             }
 
-            node_pointer _getMax() const
+            node_pointer _getMax(node_pointer root) const
             {
-                node_pointer nd = _root;
+                node_pointer nd = root;
 
                 while (nd && nd->right != _end)
                 {
@@ -132,9 +237,9 @@ namespace ft
                 return nd;
             }
 
-            node_pointer _getMin() const
+            node_pointer _getMin(node_pointer root) const
             {
-                node_pointer nd = _root;
+                node_pointer nd = root;
 
                 while (nd && nd->left != _start)
                 {

@@ -188,22 +188,25 @@ namespace ft {
 			*/
             void erase(iterator position)
             {
-                (void)position;
-                // TODO
+                erase(position->first);
             }
 
             size_type erase(const key_type& k)
             {
-                // TODO
-                (void)k;
-                return size_type();
+                return _tree.erase(ft::make_pair(k, mapped_type()));
             }
 
             void erase(iterator first, iterator last)
             {
-                // TODO
-                (void)first;
-                (void)last;
+                iterator next = first;
+
+                next++;
+                while (first != last)
+                {
+                    erase(first);
+                    first = next;
+                    next++;
+                }
             }
 
             void clear()
