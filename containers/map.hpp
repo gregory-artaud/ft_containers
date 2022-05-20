@@ -80,7 +80,7 @@ namespace ft {
             {
                 _alloc = alloc;
                 _comp = comp;
-                insert(first, last);
+            insert(first, last);
             }
             
             map(const map& x)
@@ -136,7 +136,7 @@ namespace ft {
 			*/
             bool empty() const
 			{
-				return size() == 0;
+				return (size() == 0);
 			}
             size_type max_size() const
             {
@@ -213,25 +213,23 @@ namespace ft {
 
             ft::pair<iterator,bool> insert(const value_type& val)
             {
-                // TODO
-                (void)val;
-                return ft::pair<iterator,bool>();
+                    return _tree.insert(val);
             }
 
             iterator insert(iterator position, const value_type& val)
             {
-                // TODO
                 (void)position;
-                (void)val;
-                return iterator();
+                return (insert(val).first);
             }
 
             template <class InputIterator>
             void insert(InputIterator first, InputIterator last)
             {
-                // TODO
-                (void)first;
-                (void)last;
+                while (first != last)
+                {
+                    insert(*first);
+                    first++;
+                }
             }
 
 			/*

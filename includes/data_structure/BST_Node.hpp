@@ -103,7 +103,7 @@ namespace ft
 					return findMaximum(tmp->left);
 				}
 				// climbing the tree until tmp is the right child of ret
-				ret = tmp->parent;
+ 				ret = tmp->parent;
 				while (ret && ret->left == tmp)
 				{
 					tmp = ret;
