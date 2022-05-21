@@ -113,6 +113,7 @@ namespace ft
                 bool newNodeHasBeenInserted;
                 size_type initialSize = _size;
 
+                _genDot();
                 position = _insert(_root, val);
 
                 // On first element inserted
@@ -125,6 +126,10 @@ namespace ft
                     _end->parent = _root;
                 }
                 newNodeHasBeenInserted = (initialSize != _size);
+                if (newNodeHasBeenInserted)
+                {
+                    position = _searchByKey(val, _root);
+                }
                 return ft::make_pair<iterator,bool>(iterator(position), newNodeHasBeenInserted);
             }
 
@@ -150,28 +155,18 @@ namespace ft
                 // Going in right subtree
                 if (_comp(root->value.first, val.first))
                 {
-                    // Special case to keep iterators consistency
-                    if (root->right == _end) // TODO delete
+                    root->right = _deleteByKey(root->right, val);
+                    if (root->right)
                     {
-                        return NULL;
-                    }
-                    else
-                    {
-                        root->right = _deleteByKey(root->right, val);
                         root->right->parent = root;
                     }
                 }
                 // Going in left subtree
                 else if (_comp(val.first, root->value.first))
                 {
-                    // Special case to keep iterators consistency
-                    if (root->left == _start) // TODO delete
+                    root->left = _deleteByKey(root->left, val);
+                    if (root->left)
                     {
-                        return NULL;
-                    }
-                    else
-                    {
-                        root->left = _deleteByKey(root->left, val);
                         root->left->parent = root;
                     }
                 }
@@ -181,7 +176,6 @@ namespace ft
                     // root is leaf
                     if (root->isLeaf())
                     {
-                        std::cout << "test" << std::endl;
                         if (root->isRoot())
                         {
                            _start->parent = NULL;
@@ -225,7 +219,10 @@ namespace ft
                     {
                         root->value = _getMin(root->right)->value;
                         root->right = _deleteByKey(root->right, root->value);
-                        root->right->parent = root;
+                        if (root->right)
+                        {
+                            root->right->parent = root;
+                        }
                     }
                 }
                 return root;
@@ -285,30 +282,6 @@ namespace ft
                 return nd;
             }
 
-            void _placeBeforeEnd(node_pointer newNode, node_pointer max)
-            {
-                if (!max)
-                {
-                    return ;
-                }
-                max->right = newNode;
-                newNode->parent = max;
-                newNode->right = _end;
-                _end->parent = newNode;
-            }
-
-            void _placeAfterStart(node_pointer newNode, node_pointer min)
-            {
-                if (!min)
-                {
-                    return ;
-                }
-                min->left = newNode;
-                newNode->parent = min;
-                newNode->left = _start;
-                _start->parent = newNode;
-            }
-
             node_pointer _insert(node_pointer root, const value_type& val)
             {
                 if (!root)
@@ -316,31 +289,37 @@ namespace ft
                     _size++;
                     return _getNewNode(val);
                 }
+                if (root == _start)
+                {
+                    node_pointer newNode = _getNewNode(val);
+
+                    newNode->left = _start;
+                    _start->parent = newNode;
+                    _size++;
+                    return newNode;
+                }
+                if (root == _end)
+                {
+                    node_pointer newNode = _getNewNode(val);
+
+                    newNode->right = _end;
+                    _end->parent = newNode;
+                    _size++;
+                    return newNode;
+                }
                 if (_comp(root->value.first, val.first))
                 {
-                    if (root->right == _end)
+                    root->right = _insert(root->right, val);
+                    if (root->right)
                     {
-                        // Insert new node between root and _end to keep iterator consistency
-                        _placeBeforeEnd(_getNewNode(val), root);
-                        _size++;
-                    }
-                    else
-                    {
-                        root->right = _insert(root->right, val);
                         root->right->parent = root;
                     }
                 }
                 if (_comp(val.first, root->value.first))
                 {
-                    // Insert new node between root and _start to keep iterator consistency
-                    if (root->left == _start)
+                    root->left = _insert(root->left, val);
+                    if (root->left)
                     {
-                        _placeAfterStart(_getNewNode(val), root);
-                        _size++;
-                    }
-                    else
-                    {
-                        root->left = _insert(root->left, val);
                         root->left->parent = root;
                     }
                 }
