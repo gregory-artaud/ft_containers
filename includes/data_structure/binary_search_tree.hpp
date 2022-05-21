@@ -113,7 +113,6 @@ namespace ft
                 bool newNodeHasBeenInserted;
                 size_type initialSize = _size;
 
-                _genDot();
                 position = _insert(_root, val);
 
                 // On first element inserted
