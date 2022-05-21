@@ -1,6 +1,9 @@
 #ifndef BINARY_SEARCH_TREE_HPP
 #define BINARY_SEARCH_TREE_HPP
 
+#include <iostream>
+#include <fstream>
+#include <string>
 #include "../functional/functional.hpp"
 #include "../utility/utility.hpp"
 #include "../iterator/bst_iterator.hpp"
@@ -34,20 +37,26 @@ namespace ft
                 _alloc = allocator;
                 _comp = compare;
 
-                _start = _alloc.allocate(1);
-                _alloc.construct(_start, node_type());
-				_end = _alloc.allocate(1);
+                _start = _getNewNode();
+				_end = _getNewNode();
                 _size = 0;
                 _root = NULL;
             }
 
             ~BinarySearchTree()
 			{
-				clear();
-				_alloc.deallocate(_end, 1);
-                _alloc.destroy(_start);
-                _alloc.deallocate(_start, 1);
+                clear();
+                _destroy(_start);
+                _destroy(_end);
 			}
+
+            void clear()
+            {
+                while (size() > 0)
+                {
+                    erase(begin());
+                }
+            }
 
 			iterator begin()
 			{
@@ -59,33 +68,38 @@ namespace ft
 			}
 			iterator end()
 			{
+                if (size() == 0)
+                {
+                    return begin();
+                }
 				return iterator(_end);
 			}
 			const_iterator end() const
 			{
+                if (size() == 0)
+                {
+                    return begin();
+                }
 				return const_iterator(_end);
 			}
 
-            size_type erase(const value_type& val)
+            void erase(iterator it)
             {
-                size_type initialSize = _size;
-
-                _deleteByKey(_root, val);
-                return (initialSize - _size);
-            }
+                if (_searchByKey(*it, _root))
+                {
+                    _deleteByKey(_root, *it);
+                }
+            } 
             
-            void clear()
+            iterator searchByKey(value_type toSearch) const
             {
-                // TODO
-            }
+                node_pointer nd = _searchByKey(toSearch, _root);
 
-            node_pointer searchByKey(value_type toSearch)
-            {
-               if (!_root)
-               {
-                   return NULL;
-               }
-               return _searchByKey(toSearch, _root);
+                if (!nd)
+                {
+                    return iterator(_end);
+                }
+                return iterator(nd);
             }
 
             size_type size() const
@@ -108,6 +122,7 @@ namespace ft
                     _root->left = _start;
                     _start->parent = _root;
                     _root->right = _end;
+                    _end->parent = _root;
                 }
                 newNodeHasBeenInserted = (initialSize != _size);
                 return ft::make_pair<iterator,bool>(iterator(position), newNodeHasBeenInserted);
@@ -115,7 +130,7 @@ namespace ft
 
             bool isLeaf(const node_type& nd) const
             {
-                return nd.isLeaf() || (nd.left == _start && nd.right == _end);
+                return nd.isLeaf();
             }
 
         private:
@@ -136,70 +151,88 @@ namespace ft
                 if (_comp(root->value.first, val.first))
                 {
                     // Special case to keep iterators consistency
-                    if (root->right == _end)
+                    if (root->right == _end) // TODO delete
                     {
                         return NULL;
                     }
                     else
                     {
                         root->right = _deleteByKey(root->right, val);
+                        root->right->parent = root;
                     }
                 }
                 // Going in left subtree
                 else if (_comp(val.first, root->value.first))
                 {
                     // Special case to keep iterators consistency
-                    if (root->left == _start)
+                    if (root->left == _start) // TODO delete
                     {
                         return NULL;
                     }
                     else
                     {
                         root->left = _deleteByKey(root->left, val);
+                        root->left->parent = root;
                     }
                 }
                 // Deletion happens here
                 else
                 {
                     // root is leaf
-                    if (isLeaf(*root))
+                    if (root->isLeaf())
                     {
+                        std::cout << "test" << std::endl;
+                        if (root->isRoot())
+                        {
+                           _start->parent = NULL;
+                           _end->parent = NULL;
+                           _root = NULL;
+                        }
                         _destroy(root);
+                        _size--;
                         return NULL;
                     }
                     // root has right child
-                    else if (root->left == NULL || root->left == _start)
+                    else if (root->left == NULL)
                     {
                         node_pointer tmp = root->right;
-
+                        
                         _destroy(root);
+                        _size--;
                         return tmp;
                     }
                     // root has left child
-                    else if (root->right == NULL || root->right == _end)
+                    else if (root->right == NULL)
                     {
                         node_pointer tmp = root->left;
 
                         _destroy(root);
+                        _size--;
                         return tmp;
+                    }
+                    // root is the last node
+                    else if (root->left == _start && root->right == _end)
+                    {
+                        _start->parent = NULL;
+                        _end->parent = NULL;
+                        _root = NULL;
+                        _destroy(root);
+                        _size--;
+                        return NULL;
                     }
                     // root has both left and right child
                     else
                     {
                         root->value = _getMin(root->right)->value;
                         root->right = _deleteByKey(root->right, root->value);
+                        root->right->parent = root;
                     }
                 }
                 return root;
             }
 
-            void _unlink(node_pointer node)
+            void _relink(node_pointer node)
             {
-                if (node->isRoot())
-                {
-                    _start->parent = NULL;
-                    return ;
-                }
                 if (node->left == _start)
                 {
                     node->parent->left = _start;
@@ -208,12 +241,16 @@ namespace ft
                 if (node->right == _end)
                 {
                     node->parent->right = _end;
+                    _end->parent = node->parent->right;
                 }
             }
 
             void _destroy(node_pointer node)
             {
-                _unlink(node);
+                if (!node->isRoot())
+                {
+                    _relink(node);
+                }
                 _alloc.destroy(node);
                 _alloc.deallocate(node, 1);
             }
@@ -230,7 +267,7 @@ namespace ft
             {
                 node_pointer nd = root;
 
-                while (nd && nd->right != _end)
+                while (nd && nd->right && nd->right != _end)
                 {
                     nd = nd->right;
                 }
@@ -241,7 +278,7 @@ namespace ft
             {
                 node_pointer nd = root;
 
-                while (nd && nd->left != _start)
+                while (nd && nd->left && nd->left != _start)
                 {
                     nd = nd->left;
                 }
@@ -257,6 +294,7 @@ namespace ft
                 max->right = newNode;
                 newNode->parent = max;
                 newNode->right = _end;
+                _end->parent = newNode;
             }
 
             void _placeAfterStart(node_pointer newNode, node_pointer min)
@@ -310,24 +348,84 @@ namespace ft
 
             }
 
-            node_pointer _searchByKey(value_type toSearch, node_pointer nd)
+            node_pointer _searchByKey(value_type toSearch, node_pointer nd) const
             {
-                if (!nd)
+                if (!nd || nd == _start || nd == _end)
                 {
                     return NULL;
                 }
 
                 value_type ndValue = nd->value;
 
-                if (ndValue.first == toSearch.first)
-                {
-                    return nd;
-                }
-                if (ndValue.first < toSearch.first)
+                if (_comp(ndValue.first, toSearch.first))
                 {
                     return _searchByKey(toSearch, nd->right);
                 }
-                return _searchByKey(toSearch, nd->left);
+                else if (_comp(toSearch.first, ndValue.first))
+                {
+                    return _searchByKey(toSearch, nd->left);
+                }
+                return nd;
+            }
+            
+            void _writeTree(node_pointer node, std::ofstream& fs) const
+            {
+                node_pointer child;
+
+                if (!node)
+                {
+                    return ;
+                }
+                if (isLeaf(*node) && node->isRoot())
+                {
+                    fs << "\t\"" << node << "\"";
+                    return ;
+                }
+                child = node->left;
+                if (child)
+                {
+                    fs << "\t\"" << node << "\" -- \"" << child << "\"\n";
+                }
+                child = node->right;
+                if (child)
+                {
+                    fs << "\t\"" << node << "\" -- \"" << child << "\"\n";
+                }
+                child = node->left;
+                if (child)
+                {
+                    _writeTree(child, fs);
+                }
+                child = node->right;
+                if (child)
+                {
+                    _writeTree(child, fs);
+                }
+            }
+
+            void _genDot() const
+            {
+                static int id = 0;
+                const char name[6] = { id++ + 'a', '.', 'd', 'o', 't', 0 };
+                std::ofstream file(name);
+                const_iterator it = begin();
+
+                file << "graph tree {\n\tforcelabels=true\n";
+
+                // parse labels
+                while (it != end())
+                {
+                    // write labels
+                    file << "\t\"" << it.base() << "\"[label=\"" <<
+                        it->first << "," << it->second << "\"]\n";
+                    it++;
+                }
+                file << "\t\"" << _start << "\"[label=\"start\"]\n";
+                file << "\t\"" << _end << "\"[label=\"end\"]\n";
+
+                _writeTree(_root, file);
+                file << "\n}";
+                file.close();
             }
     };
 }

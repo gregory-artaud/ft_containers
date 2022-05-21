@@ -2,6 +2,7 @@
 #define MAP_HPP
 
 #include <memory>
+#include <limits>
 #include "../includes/data_structure/data_structure.hpp"
 #include "../includes/functional/functional.hpp"
 #include "../includes/utility/utility.hpp"
@@ -15,8 +16,9 @@
 ** TODO:
 **
 ** - Recheck roadmap
-** - Do BinarySearchTree
-** - Implement everything
+** - Working on copy_construct test
+**      Needed for the test:
+**          - operator= (infinite loop on the clear call)
 **
 */
 
@@ -28,6 +30,7 @@ namespace ft {
 			typedef Key key_type;
 			typedef T mapped_type;
 			typedef ft::pair<key_type, mapped_type> value_type;
+            typedef typename ft::BinarySearchTree<value_type, Compare>::node_type node_type;
 			typedef Compare key_compare;
 			typedef Alloc allocator_type;
 			typedef typename allocator_type::reference reference;
@@ -80,7 +83,7 @@ namespace ft {
             {
                 _alloc = alloc;
                 _comp = comp;
-            insert(first, last);
+                insert(first, last);
             }
             
             map(const map& x)
@@ -140,7 +143,8 @@ namespace ft {
 			}
             size_type max_size() const
             {
-                return allocator_type().max_size(); 
+                // TODO search why divide by 2, hint: numeric limits is lower on MacOs
+                return (std::numeric_limits<size_type>::max() / sizeof(node_type)) / 2;
             }
             size_type size() const
             {
@@ -188,30 +192,37 @@ namespace ft {
 			*/
             void erase(iterator position)
             {
-                erase(position->first);
+                _tree.erase(position);
             }
 
             size_type erase(const key_type& k)
             {
-                return _tree.erase(ft::make_pair(k, mapped_type()));
+                iterator it = find(k);
+
+                if (it == end())
+                {
+                    return 0;
+                }
+                erase(it);
+                return 1;;
             }
 
             void erase(iterator first, iterator last)
             {
-                iterator next = first;
-
-                next++;
-                while (first != last)
+                iterator tmp;
+                
+                if (first == last)
                 {
-                    erase(first);
-                    first = next;
-                    next++;
+                    return ;
                 }
+                tmp = first;
+                erase(++first, last);
+                erase(tmp);
             }
 
             void clear()
             {
-                erase(begin(), end());
+                _tree.clear();
             }
 
             ft::pair<iterator,bool> insert(const value_type& val)
@@ -261,16 +272,12 @@ namespace ft {
 
             iterator find(const key_type& k)
             {
-                // TODO
-                (void)k;
-                return iterator();
+                return _tree.searchByKey(ft::make_pair(k, mapped_type()));
             }
 
             const_iterator find(const key_type& k) const
             {
-                // TODO
-                (void)k;
-                return const_iterator();
+                return _tree.searchByKey(ft::make_pair(k, mapped_type()));
             }
 
 			/*
@@ -278,8 +285,9 @@ namespace ft {
 			*/
             map& operator=(const map& x)
             {
-                // TODO
-                (void)x;
+                clear();
+                _comp = x.key_comp();
+                insert(x.begin(), x.end());
                 return *this;
             }
             void swap(map& x)
