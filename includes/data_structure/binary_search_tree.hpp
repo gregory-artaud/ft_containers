@@ -39,6 +39,7 @@ namespace ft
 
                 _start = _getNewNode();
 				_end = _getNewNode();
+                _start->parent = _end;
                 _size = 0;
                 _root = NULL;
             }
@@ -97,7 +98,7 @@ namespace ft
 
                 if (!nd)
                 {
-                    return iterator(_end);
+                    return end();
                 }
                 return iterator(nd);
             }

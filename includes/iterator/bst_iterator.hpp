@@ -4,6 +4,9 @@
 #include "iterators_traits.hpp"
 
 namespace ft {
+    template <typename T, class Compare> class bst_iterator;
+    template <typename T, class Compare> class bst_const_iterator;
+    
 	template <typename T, class Compare>
         class bst_iterator : ft::iterator<ft::bidirectional_iterator_tag, T> {
 			public:
@@ -18,6 +21,8 @@ namespace ft {
 
 				// Copy constructor
 				bst_iterator(const bst_iterator& it) : _data(it._data) {}
+
+                bst_iterator(const bst_const_iterator<T, Compare>& it) : _data(it.base()) {}
 
 				// Constructor from pointer
 				bst_iterator(T* data) : _data(data) {}

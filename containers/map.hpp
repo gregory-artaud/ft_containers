@@ -16,9 +16,6 @@
 ** TODO:
 **
 ** - Recheck roadmap
-** - Working on copy_construct test
-**      Needed for the test:
-**          - operator= (infinite loop on the clear call)
 **
 */
 
@@ -156,30 +153,50 @@ namespace ft {
 			*/
             iterator lower_bound(const key_type& k)
             {
-                // TODO
-                (void)k;
-                return iterator();
+                for (iterator it = begin(); it != end(); ++it)
+                {
+                    if (!_comp(it->first, k))
+                    {
+                        return it;
+                    }
+                }
+                return end();
             }
 
             const_iterator lower_bound(const key_type& k) const
             {
-                // TODO
-                (void)k;
-                return const_iterator();
+                for (const_iterator it = begin(); it != end(); ++it)
+                {
+                    if (!_comp(it->first, k))
+                    {
+                        return it;
+                    }
+                }
+                return end();
             }
 
             iterator upper_bound(const key_type& k)
             {
-                // TODO
-                (void)k;
-                return iterator();
+                for (iterator it = begin(); it != end(); ++it)
+                {
+                    if (_comp(k, it->first))
+                    {
+                        return it;
+                    }
+                }
+                return end();
             }
 
             const_iterator upper_bound(const key_type& k) const
             {
-                // TODO
-                (void)k;
-                return const_iterator();
+                for (const_iterator it = begin(); it != end(); ++it)
+                {
+                    if (_comp(k, it->first))
+                    {
+                        return it;
+                    }
+                }
+                return end();
             }
 
             mapped_type& operator[](const key_type& k)
@@ -251,28 +268,35 @@ namespace ft {
 			*/
             size_type count(const key_type& k) const
             {
-                // TODO
-                (void)k;
-                return size_type();
+                const_iterator it = find(k);
+
+                if (it != end())
+                {
+                    return 1;
+                }
+                return 0;
             }
 
             ft::pair<const_iterator,const_iterator> equal_range(const key_type& k) const
             {
-                // TODO
-                (void)k;
-                return ft::pair<const_iterator,const_iterator>();
+                const_iterator first = lower_bound(k);
+                const_iterator second = upper_bound(k);
+                return ft::make_pair(first, second);
             }
 
             ft::pair<iterator,iterator> equal_range(const key_type& k)
             {
-                // TODO
-                (void)k;
-                return ft::pair<iterator,iterator>();
+                iterator first = lower_bound(k);
+                iterator second = upper_bound(k);
+                return ft::make_pair(first, second);
             }
 
             iterator find(const key_type& k)
             {
-                return _tree.searchByKey(ft::make_pair(k, mapped_type()));
+                iterator it = _tree.searchByKey(ft::make_pair(k, mapped_type()));
+
+                return it;
+                
             }
 
             const_iterator find(const key_type& k) const
