@@ -293,10 +293,7 @@ namespace ft {
 
             iterator find(const key_type& k)
             {
-                iterator it = _tree.searchByKey(ft::make_pair(k, mapped_type()));
-
-                return it;
-                
+                return _tree.searchByKey(ft::make_pair(k, mapped_type()));
             }
 
             const_iterator find(const key_type& k) const

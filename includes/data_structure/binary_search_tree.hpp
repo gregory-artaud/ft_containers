@@ -92,7 +92,7 @@ namespace ft
                 }
             } 
             
-            iterator searchByKey(value_type toSearch) const
+            iterator searchByKey(value_type toSearch)
             {
                 node_pointer nd = _searchByKey(toSearch, _root);
 
@@ -101,6 +101,17 @@ namespace ft
                     return end();
                 }
                 return iterator(nd);
+            }
+
+            const_iterator searchByKey(value_type toSearch) const
+            {
+                node_pointer nd = _searchByKey(toSearch, _root);
+
+                if (!nd)
+                {
+                    return end();
+                }
+                return const_iterator(nd);
             }
 
             size_type size() const
