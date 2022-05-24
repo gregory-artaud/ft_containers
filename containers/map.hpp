@@ -313,8 +313,11 @@ namespace ft {
             }
             void swap(map& x)
             {
-                // TODO
-                (void)x;
+                if (x == *this)
+                {
+                    return ;
+                }
+                _tree.swap(x._tree);
             }
 
 			/*

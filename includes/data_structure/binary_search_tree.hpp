@@ -149,6 +149,28 @@ namespace ft
                 return nd.isLeaf();
             }
 
+            void swap(BinarySearchTree& tree)
+            {
+                node_pointer tmp;
+                size_type sz;
+
+                tmp = tree._root;
+                tree._root = _root;
+                _root = tmp;
+
+                tmp = tree._end;
+                tree._end = _end;
+                _end = tmp;
+
+                tmp = tree._start;
+                tree._start = _start;
+                _start = tmp;
+
+                sz = tree._size;
+                tree._size = _size;
+                _size = sz;
+            }
+
         private:
             node_pointer _start;
             node_pointer _root;
@@ -393,6 +415,7 @@ namespace ft
                 }
             }
 
+        public:
             void _genDot() const
             {
                 static int id = 0;
