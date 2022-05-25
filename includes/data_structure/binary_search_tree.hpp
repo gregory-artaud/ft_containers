@@ -25,7 +25,7 @@ namespace ft
             typedef Compare compare_type;
 
 			typedef ft::bst_iterator<node_type, Compare> iterator;
-			typedef ft::bst_const_iterator<node_type, Compare> const_iterator;
+			typedef ft::bst_const_iterator<node_type, const value_type, Compare> const_iterator;
             typedef ft::reverse_iterator<iterator> reverse_iterator;
             typedef ft::reverse_iterator<const_iterator> const_reverse_iterator;
 
