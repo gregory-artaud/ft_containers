@@ -83,6 +83,22 @@ namespace ft
                 }
 				return const_iterator(_end);
 			}
+            reverse_iterator rbegin()
+            {
+                return reverse_iterator(_end);
+            }
+            const_reverse_iterator rbegin() const
+            {
+                return const_reverse_iterator(_end);
+            }
+            reverse_iterator rend()
+            {
+                return reverse_iterator(_start->parent);
+            }
+            const_reverse_iterator rend() const
+            {
+                return const_reverse_iterator(_start->parent);
+            }
 
             void erase(iterator it)
             {
@@ -416,7 +432,7 @@ namespace ft
             }
 
         public:
-            void _genDot() const
+            void genDot() const
             {
                 static int id = 0;
                 const char name[6] = { id++ + 'a', '.', 'd', 'o', 't', 0 };

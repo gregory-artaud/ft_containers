@@ -116,19 +116,19 @@ namespace ft {
 			}
 			reverse_iterator rbegin()
 			{
-				return reverse_iterator(end());
+				return _tree.rbegin();
 			}
 			const_reverse_iterator rbegin() const
 			{
-				return reverse_iterator(end());
+				return _tree.rbegin();
 			}
 			reverse_iterator rend()
 			{
-				return reverse_iterator(begin());
+				return _tree.rend();
 			}
 			const_reverse_iterator rend() const
 			{
-				return reverse_iterator(begin());
+				return _tree.rend();
 			}
 
 			/*
@@ -350,7 +350,10 @@ namespace ft {
     bool operator==(const map<Key,T,Compare,Alloc>& lhs,
         const map<Key,T,Compare,Alloc>& rhs)
     {
-        if (lhs.size() != rhs.size()) return false;
+        if (lhs.size() != rhs.size())
+        {
+            return false;
+        }
         return ft::equal(lhs.begin(), lhs.end(), rhs.begin());
     }
 

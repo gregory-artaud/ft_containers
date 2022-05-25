@@ -107,6 +107,10 @@ namespace ft {
 
 				// Assignation operator
 				bst_const_iterator& operator=(const bst_const_iterator& rhs) {
+                    if (*this == rhs)
+                    {
+                        return *this;
+                    }
 					_data = rhs._data;
 					return *this;
 				}
