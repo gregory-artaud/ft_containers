@@ -141,6 +141,11 @@ namespace ft
                 bool newNodeHasBeenInserted;
                 size_type initialSize = _size;
 
+                position = _searchByKey(val, _root);
+                if (position)
+                {
+                    return ft::make_pair<iterator,bool>(iterator(position), false);
+                }
                 position = _insert(_root, val);
 
                 // On first element inserted
