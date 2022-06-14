@@ -138,10 +138,19 @@ namespace ft {
 			{
 				return (size() == 0);
 			}
+			/*
+			** Result may vary from STL map due to Node implementation, which has an impact on sizeof(node_type)
+			** In those variations, STL has a 	sizeof(node_type) = 40
+			** mine has a 						sizeof(node_type) = 48
+			*/
             size_type max_size() const
             {
-                // TODO search why divide by 2, hint: numeric limits is lower on MacOs
-                return (std::numeric_limits<size_type>::max() / sizeof(node_type)) / 2;
+			   	size_type res = std::numeric_limits<size_type>::max() / sizeof(node_type);
+				
+				// hacky patch
+				//if (res == 384307168202282325)
+				//	return 461168601842738790;
+				return (res);
             }
             size_type size() const
             {
