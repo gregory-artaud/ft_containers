@@ -1,7 +1,4 @@
 .vscode
 **/*.o
-vector
-map
-stack
-logs
-containers_test
+tests/big_tests/deepthought
+tests/big_tests/logs
