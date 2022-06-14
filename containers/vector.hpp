@@ -10,11 +10,6 @@
 ** 
 ** Documentation: https://www.cplusplus.com/reference/vector/vector/
 **
-** TODO:
-**
-** - Recheck execution time and complexity of insert
-** - Recheck execution time and complexity of assign
-**
 */
 
 namespace ft {

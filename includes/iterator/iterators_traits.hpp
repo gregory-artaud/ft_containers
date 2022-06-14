@@ -3,7 +3,6 @@
 
 #include <cstddef>
 
-// TODO
 namespace ft {
 	class input_iterator_tag {};
 	class random_access_iterator_tag {};

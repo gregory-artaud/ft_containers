@@ -13,10 +13,6 @@
 ** 
 ** Documentation: https://www.cplusplus.com/reference/map/map/
 **
-** TODO:
-**
-** - Recheck roadmap
-**
 */
 
 namespace ft {
