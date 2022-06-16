@@ -400,7 +400,10 @@ namespace ft
                 }
                 return nd;
             }
-            
+
+		   /*
+		   ** Debug functions to generate .dot file to visualize the tree
+		   */ 
             void _writeTree(node_pointer node, std::ofstream& fs) const
             {
                 node_pointer child;
